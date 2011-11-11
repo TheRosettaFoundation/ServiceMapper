@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /><title>Readme.html</title>
+
+<link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+$("#temp").load("apipmui.php");
+var refreshId = setInterval(function() {
+$("#temp").load("apipmui.php");
+}, 5000);
+});
+</script>
+</head>
+<body>
+<div id="wrapper">
+<div id="header">
+<h1></h1>
+</div>
+<div style="font-weight: bold;" id="menu">
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="about.html">Readme</a></li>
+</ul>
+</div>
+<div id="content">
+<div class="entry"><span style="font-weight: bold;"></span><br />
+MT-Broker will interact with 'locConnect' for 'SOLAS' will have two parts: MTBroker_Select and MTBroker_Connect.<br />
+In future MTBroker_Select sends back to locConnect a nominated service descriptor considered as an optimal service for the provided workflow requirements.<br /> 
+Then locConnect call MTBroker_Connect to call the target MT. <br />
+On 2011/Nov only MTBroker_Connect has been developed connecting Babelfish MT provided by Yahoo!. MTBroker_Select is under development. 
+<br />
+&nbsp;<br style="font-weight: bold;" />
+<span style="font-weight: bold;">1. MTBroker_Connect requirements: </span><br /><div style="text-align: left; margin-left: 40px;">
+php<br />
+PEAR (HTTP_Request2)<br />
+javascript,XLIFF1.2<br />
+XLIFF1.2<br />
+</div><br style="font-weight: bold;" />
+
+<div style="text-align: left; margin-left: 80px;">
+languages.ini<br />
+apipmui.php<br />
+index.html<br />
+MTBroker_Connect.class.php<br />
+Process_XLIFF.class.php<br />
+upload.php<br /></div><br style="font-weight: bold;" />
+
+<span style="font-weight: bold;">2. Call index.html</span><br /><div style="text-align: left; margin-left: 40px;"><p>
+2.1 Standalone component</br>
+It provides the user interface for you to process XLIFF file for translation as a standalone component as well as automatically and continuously calling locConnect looking for job posts.
+As a standalone components it reads upload.php, it allows you to download or display on the web browser.
+</p></div>
+<br /><div style="text-align: left; margin-left: 40px;">
+2.2 Interact with locConnect
+It reads apipmui.php
+</div>
+<p class="MsoNormal" style="margin-left: 54pt; text-indent: -18pt;"><span style="font-family: Symbol;"><span style=""></span></span></p>
+LocConnect Status:
+<div id="temp"></div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-valid"> <a href="http://validator.w3.org/check/referer">xhtml</a>
+/ <a href="http://www.ginger-ninja.net/">ginger ninja!</a>
+</div>
+</div>
+</div>
+</body></html>
