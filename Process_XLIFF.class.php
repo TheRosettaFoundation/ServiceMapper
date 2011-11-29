@@ -83,13 +83,13 @@ public function processXLIFF($xliff){
 				  $sources = $transUnit->getElementsByTagName( "source" );
 				  $text = $sources->item(0)->nodeValue;
 				$string1= new MTConnect();
-					//$text="I'm using it to do tests to the system, which may not yet be stable. ";
 					//$provider[2] = 'google';
-					//$provider[1] ='microsoft'; 
 					$provider[0] ='babelfish';
+					$provider[1] ='microsoft'; 
 					$proxy='ul';//$proxy='';
 					//Once only Babelfish 2011-11-04//for ($i=0; $i<=2; $i++)
-						for ($i=0; $i<=0; $i++){			
+					//MS Bing is added 2011-11-04 //for ($i=0; $i<=1; $i++)
+						for ($i=0; $i<=1; $i++){			
 							$preferred_provider=$provider[$i];
 							
 							if (trim($text)!=""){								
