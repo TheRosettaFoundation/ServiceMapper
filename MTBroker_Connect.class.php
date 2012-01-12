@@ -76,7 +76,7 @@ class MTConnect{
 
 	private function babelFish($source,$target,$text,$proxy){       
 		//require_once 'HTTP\Request2.php'; // uses Pear for Windows.
-		require_once 'HTTP/Request2.php'; // uses Pear for MacOSX
+		require_once 'HTTP'.DIRECTORY_SEPARATOR.'Request2.php'; // uses Pear for MacOSX
 		$b_slang=strtoupper($source);
 		$b_tlang=strtoupper($target);
 		$arr= parse_ini_file("languages.ini");
