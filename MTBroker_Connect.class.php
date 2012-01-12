@@ -10,7 +10,7 @@ class MTConnect{
 	var $use_proxy = false;
 	
 	/* 
-	 * Main machine translation methond. Must be called with the following parameters:
+	 * Main machine translation method. Must be called with the following parameters:
 	 * $source: source language string, e.g. "english"
 	 * $target: target language string, e.g. "spanish"
 	 * $text: text string to be translated.
