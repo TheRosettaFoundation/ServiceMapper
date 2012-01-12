@@ -46,7 +46,7 @@ foreach ($files2 as $file) {
 	$response=$request->send()->getBody();
 }	
 				
-if ($jobId){
+if (isset($jobId)) {
 	print('Now processing:'.$jobId.'<br/>');	
 	$files = $doc->getElementsByTagName( "job" );
 	//do{
