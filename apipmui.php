@@ -10,30 +10,29 @@ $request->setHeader('Accept-Charset', 'utf-8');
 $url = $request->getUrl();
 $url->setQueryVariable('com', 'MT');         // set your component name here
 
-
 function get_rid_of_content($jobs){
 	$output=$jobs;
 	$output = str_replace("<content>", "", $output);
 	$output = str_replace("</content>", "", $output);
-return $output;
-};
-$jobs=$request->send()->getBody();
+	return $output;
+}
+
+$jobs = $request->send()->getBody();
 $doc = new DOMDocument();
 $doc->loadXML($jobs );	
 $xpath = new DOMXPath($doc);
- //2010-08-30
 $files = $doc->getElementsByTagName("error");
 $files1 = $doc->getElementsByTagName("jobs");
 	 
-foreach($files as $file ){
+foreach ($files as $file) {
 	$content =$file->getElementsByTagName( "msg" );
 	$xmlUserName=$content->item(0)->nodeValue; 					
 	srand(time());
-$random = (rand()%9);
+	$random = (rand()%9);
 }	
 $files2 = $doc->getElementsByTagName("jobs");
 		
-foreach($files2 as $file ){
+foreach ($files2 as $file) {
 	$content =$file->getElementsByTagName( "job" );
 	$jobId=$content->item(0)->nodeValue; 
 	//print("now processing:".$jobId);
@@ -43,16 +42,16 @@ foreach($files2 as $file ){
 	$url->setQueryVariable('com', 'MT');         // set your component name here
 	$url->setQueryVariable('id', $jobId);         // set job id here
 	$url->setQueryVariable('msg', 'processing'); 
-// This will get the server response 
-$response=$request->send()->getBody();
+	// This will get the server response 
+	$response=$request->send()->getBody();
 }	
 				
 if ($jobId){
- print('Now processing:'.$jobId.'<br/>');	
- $files = $doc->getElementsByTagName( "job" );
- //do{
-  foreach($files as $file ){
-        require_once 'HTTP\Request2.php'; // uses Pear
+	print('Now processing:'.$jobId.'<br/>');	
+	$files = $doc->getElementsByTagName( "job" );
+	//do{
+  	foreach ($files as $file ) {
+        require_once 'HTTP'.DIRECTORY_SEPARATOR.'Request2.php'; // uses Pear
 		$request = new HTTP_Request2($locConnect.'get_job.php', HTTP_Request2::METHOD_GET);
 		$request->setHeader('Accept-Charset', 'utf-8');
 		$url = $request->getUrl();
@@ -64,7 +63,6 @@ if ($jobId){
 		
 		$toolid='MT';
 		$phasename='MT-Leverage';
-//2010-08-31
 		$request = new HTTP_Request2($locConnect.'send_output.php', HTTP_Request2::METHOD_POST);
 		$data = new XLIFF(); //2011-11-05
 		//$data->processXLIFF($xliff); //2011-11-05
@@ -92,7 +90,7 @@ if ($jobId){
 			echo 'Error: '.$e->getMessage();
 		}
 		
-//feedback
+		//feedback
 		$request = new HTTP_Request2($locConnect.'send_feedback.php', HTTP_Request2::METHOD_GET);
 		$request->setHeader('Accept-Charset', 'utf-8');
 		$url = $request->getUrl();
@@ -100,11 +98,11 @@ if ($jobId){
 		$url->setQueryVariable('id', $jobId);         // set job id here
 		$url->setQueryVariable('msg', 'Enriched the xliff with alternative translations obtained via Google, Bing and Babelfish');         // set your component's feedback here
 
-// This will get the server response 
-$response=$request->send()->getBody();
-echo $response;
+		// This will get the server response 
+		$response=$request->send()->getBody();
+		echo $response;
 
-//2010-08-31
+		//2010-08-31
 		$request = new HTTP_Request2($locConnect.'set_status.php', HTTP_Request2::METHOD_GET);
 		$request->setHeader('Accept-Charset', 'utf-8');
 		$url = $request->getUrl();
@@ -115,7 +113,6 @@ echo $response;
 	}     
 } 
 else{
-$time_start = microtime(true);
-print('Waiting for a job : ('.$time_start.') <br/>'); 	
- }
-?>
+	$time_start = microtime(true);
+	print('Waiting for a job : ('.$time_start.') <br/>'); 	
+}
