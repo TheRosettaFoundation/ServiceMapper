@@ -1,7 +1,7 @@
 <?php
 include("MTBroker_Connect.class.php");
 include("Process_XLIFF.class.php");
-$locConnect='http://10.100.13.155/locConnect2.0/';
+$locConnect='http://193.1.97.50/locconnect/';
 require_once 'HTTP\Request2.php'; // uses Pear
 
 // This will get a list of pending jobs from the CNLF server and store them $jobs variable;
