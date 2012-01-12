@@ -66,17 +66,17 @@ if (isset($jobId)) {
 		$request = new HTTP_Request2($locConnect.'send_output.php', HTTP_Request2::METHOD_POST);
 		$data = new XLIFF(); //2011-11-05
 		//$data->processXLIFF($xliff); //2011-11-05
-		$data->processXLIFF($content);//2011-11-05
-		$data =processXLIFF($content);//2010-10-04
+		$xliff_string = $data->processXLIFF($content);//2011-11-05
+		//$data =processXLIFF($content);//2010-10-04
 		//$data= html_entity_decode(trim($data), ENT_NOQUOTES, 'UTF-8')
-		$data= html_entity_decode(trim($data), ENT_NOQUOTES, 'UTF-8');// what is this for? 2010-10-20
-		print $data;
+		$xliff_string = html_entity_decode(trim($xliff_string), ENT_NOQUOTES, 'UTF-8');// what is this for? 2010-10-20
+		print $xliff_string;
 		
 		$request->setMethod(HTTP_Request2::METHOD_POST)
 		->addPostParameter('id', $jobId)
 		->addPostParameter('com', 'MT')
-		->addPostParameter('data', $data);
-		print $data;
+		->addPostParameter('data', $xliff_string);
+		print $xliff_string;
 		try{
 			$response=$request->send();
 			if (200 == $response->getStatus()){
