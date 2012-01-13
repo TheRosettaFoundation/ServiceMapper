@@ -1,8 +1,13 @@
 <?php
 
 include_once "MTBroker_Connect.class.php";
-class XLIFF{
-public function processXLIFF($xliff){
+/**
+ * Class XLIFF
+ *
+ * Description: [missing]
+ */
+class XLIFF {
+	public function processXLIFF($xliff) {
 		$toolid='MT';
 		$phasename='MT-Leverage';
 		$doc = new DOMDocument();
@@ -10,75 +15,77 @@ public function processXLIFF($xliff){
 		$xpath = new DOMXPath($doc);
 	  	$files = $doc->getElementsByTagName( "file" );
 	  
-			foreach( $files as $file ){
-			    $source_xx = $file->getAttribute('source-language');
-			    $target_xx =  $file->getAttribute('target-language');
-			}
+		foreach( $files as $file ){
+			$source_xx = $file->getAttribute('source-language');
+			$target_xx =  $file->getAttribute('target-language');
+		}
 	  
 	  	$arr= parse_ini_file("demolangs.ini");
 		$source=$arr[$source_xx]; 
 		$target=$arr[$target_xx];
 		$phasegroups = $doc->getElementsByTagName('phase-group');
 			
-			foreach($phasegroups as $phasegroup){
-				$root_child=$doc->createElement('phase');
-				$phasegroup ->appendChild($root_child);
-				
-				$root_attr1 = $doc->createAttribute('phase-name');
-			   	$root_child->appendChild($root_attr1);
-				$root_text = $doc->createTextNode($phasename);
-			   	$root_attr1 ->appendChild($root_text); 
-			   	
-			   	$root_attr2 = $doc->createAttribute('company-name');
-			   	$root_child->appendChild($root_attr2);
-				$root_text = $doc->createTextNode('Naoto-Company');
-			   	$root_attr2 ->appendChild($root_text); 
-			   	
-			   	$root_attr3 = $doc->createAttribute('process-name');
-			   	$root_child->appendChild($root_attr3);
-				$root_text = $doc->createTextNode('Translation-MT');
-			   	$root_attr3 ->appendChild($root_text); 
-			   	
-			   	$root_attr4 = $doc->createAttribute('contact-name');
-			   	$root_child->appendChild($root_attr4);
-				$root_text = $doc->createTextNode('Naoto');
-			   	$root_attr4 ->appendChild($root_text); 
-			   	
-			   	$root_attr5 = $doc->createAttribute('contact-email');
-			   	$root_child->appendChild($root_attr5);
-				$root_text = $doc->createTextNode('naoto.nishio@ul.ie');
-			   	$root_attr5 ->appendChild($root_text); 
-			   	
-			    $root_attr6 = $doc->createAttribute('tool-id');
-			   	$root_child->appendChild($root_attr6);
-				$root_text = $doc->createTextNode($toolid);
-			   	$root_attr6 ->appendChild($root_text); 
-			   	
-			   	$date=date("r", time());
-				$root_attr7 = $doc->createAttribute('date');
-			   	$root_child->appendChild($root_attr7);
-				$root_text = $doc->createTextNode($date);
-			   	$root_attr7 ->appendChild($root_text); 
-		   	}
+		foreach($phasegroups as $phasegroup){
+			$root_child=$doc->createElement('phase');
+			$phasegroup ->appendChild($root_child);
+			
+			$root_attr1 = $doc->createAttribute('phase-name');
+			$root_child->appendChild($root_attr1);
+			$root_text = $doc->createTextNode($phasename);
+			$root_attr1 ->appendChild($root_text); 
+			
+			$root_attr2 = $doc->createAttribute('company-name');
+			$root_child->appendChild($root_attr2);
+			$root_text = $doc->createTextNode('Naoto-Company');
+			$root_attr2 ->appendChild($root_text); 
+			
+			$root_attr3 = $doc->createAttribute('process-name');
+			$root_child->appendChild($root_attr3);
+			$root_text = $doc->createTextNode('Translation-MT');
+			$root_attr3 ->appendChild($root_text); 
+			
+			$root_attr4 = $doc->createAttribute('contact-name');
+			$root_child->appendChild($root_attr4);
+			$root_text = $doc->createTextNode('Naoto');
+			$root_attr4 ->appendChild($root_text); 
+			
+			$root_attr5 = $doc->createAttribute('contact-email');
+			$root_child->appendChild($root_attr5);
+			$root_text = $doc->createTextNode('naoto.nishio@ul.ie');
+			$root_attr5 ->appendChild($root_text); 
+			
+			$root_attr6 = $doc->createAttribute('tool-id');
+			$root_child->appendChild($root_attr6);
+			$root_text = $doc->createTextNode($toolid);
+			$root_attr6 ->appendChild($root_text); 
+			
+			$date=date("r", time());
+			$root_attr7 = $doc->createAttribute('date');
+			$root_child->appendChild($root_attr7);
+			$root_text = $doc->createTextNode($date);
+			$root_attr7 ->appendChild($root_text); 
+		}
+
    		$headers = $doc->getElementsByTagName('header');
    	
-			foreach($headers as $header){
-				$root_child=$doc->createElement('tool');
-				$header ->appendChild($root_child);
-				
-				$root_attr1 = $doc->createAttribute('tool-id');
-			   	$root_child->appendChild($root_attr1);
-				$root_text = $doc->createTextNode($toolid);
-			   	$root_attr1 ->appendChild($root_text); 
-				
-			   	$root_attr2 = $doc->createAttribute('tool-name');
-			   	$root_child->appendChild($root_attr2);
-				$root_text = $doc->createTextNode('MT-Broker/Mapper');
-			   	$root_attr2 ->appendChild($root_text); 
-			}
+		foreach($headers as $header){
+			$root_child=$doc->createElement('tool');
+			$header ->appendChild($root_child);
+			
+			$root_attr1 = $doc->createAttribute('tool-id');
+			$root_child->appendChild($root_attr1);
+			$root_text = $doc->createTextNode($toolid);
+			$root_attr1 ->appendChild($root_text); 
+			
+			$root_attr2 = $doc->createAttribute('tool-name');
+			$root_child->appendChild($root_attr2);
+			$root_text = $doc->createTextNode('MT-Broker/Mapper');
+			$root_attr2 ->appendChild($root_text); 
+		}
+		
  		$transUnits = $doc->getElementsByTagName( 'trans-unit' );
 
-		   foreach($transUnits as $transUnit ){
+	   foreach($transUnits as $transUnit ){
 				  $transID = $transUnit->getAttribute('id');
 				  $sources = $transUnit->getElementsByTagName( "source" );
 				  $text = $sources->item(0)->nodeValue;
@@ -89,7 +96,7 @@ public function processXLIFF($xliff){
 					$config = parse_ini_file('config_mapper.ini');
 					$proxy =$config['proxy'];
 					//Once only Babelfish 2011-11-04//for ($i=0; $i<=2; $i++)
-						for ($i=0; $i<=1; $i++){			
+						for ($i=0; $i<=count($provider); $i++){			
 							$preferred_provider=$provider[$i];
 							
 							if (trim($text)!=""){								
@@ -133,11 +140,9 @@ public function processXLIFF($xliff){
 						   	}
 						}
 			}
+		}
 		$doc->formatOutput = true;//this line format output when browsing HTML source. 
 		$data = $doc->saveXML();
 	
 		return $data;
-
 }
-}
-?>
