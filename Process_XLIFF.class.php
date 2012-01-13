@@ -92,7 +92,7 @@ class XLIFF {
 			$string1= new MTConnect();
 			$provider[0] ='microsoft'; 					
 			$provider[1] ='babelfish';
-			$config = parse_ini_file('config_mapper.ini');
+			$config = parse_ini_file('config.ini');
 			$proxy =$config['proxy'];
 			
 			for ($i=0; $i < count($provider); $i++){			

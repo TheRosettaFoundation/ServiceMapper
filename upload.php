@@ -6,7 +6,7 @@ $option=$_POST['select'];
 $allowed_filetypes = array('.xlf'); // These will be the types of file that will pass the validation.	  
 $max_filesize = 524288; // Maximum filesize in BYTES		
 
-$config = parse_ini_file('config_mapper.ini');
+$config = parse_ini_file('config.ini');
 $upload_path =$config['upload_path'];		
 
 $filename = $_FILES['userfile']['name']; // Get the name of the file (including file extension).

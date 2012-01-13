@@ -3,7 +3,7 @@ include("MTBroker_Connect.class.php");
 include("Process_XLIFF.class.php");
 $locConnect='http://193.1.97.50/locconnect/';
 
-$config = parse_ini_file('config_mapper.ini');
+$config = parse_ini_file('config.ini');
 $locConnect =$config['locConnect_address'];
 
 require_once 'HTTP'.DIRECTORY_SEPARATOR.'Request2.php'; // uses Pear
