@@ -5,9 +5,12 @@ require_once 'Process_XLIFF.class.php';
 $option=$_POST['select'];
 $allowed_filetypes = array('.xlf'); // These will be the types of file that will pass the validation.	  
 $max_filesize = 524288; // Maximum filesize in BYTES		
+
 $config = parse_ini_file('config_mapper.ini');
 $upload_path =$config['upload_path'];		
+
 $filename = $_FILES['userfile']['name']; // Get the name of the file (including file extension).
+
 $ext = substr($filename, strpos($filename,'.'), strlen($filename)-1); // Get the extension from the filename.
 
 if(!in_array($ext,$allowed_filetypes))// Check if the filetype is allowed, if not DIE and inform the user.
