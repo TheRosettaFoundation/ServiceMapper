@@ -94,6 +94,7 @@ class XLIFF {
 			$provider[1] ='babelfish';
 			$config = parse_ini_file('config_mapper.ini');
 			$proxy =$config['proxy'];
+			
 			for ($i=0; $i < count($provider); $i++){			
 				$preferred_provider=$provider[$i];		
 				if (trim($text)!=""){								
@@ -136,7 +137,6 @@ class XLIFF {
 				}
 			}
 		}
-	//}
 	$doc->formatOutput = true;//this line format output when browsing HTML source. 
 	$data = $doc->saveXML();
 	return $data;
