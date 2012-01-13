@@ -1,5 +1,5 @@
 <?php
-//include("MTBroker.class.php");
+
 include_once "MTBroker_Connect.class.php";
 class XLIFF{
 public function processXLIFF($xliff){
@@ -83,12 +83,12 @@ public function processXLIFF($xliff){
 				  $sources = $transUnit->getElementsByTagName( "source" );
 				  $text = $sources->item(0)->nodeValue;
 				$string1= new MTConnect();
-					//$provider[2] = 'google';
-					$provider[0] ='babelfish';
-					$provider[1] ='microsoft'; 
-					$proxy='ul';//$proxy='';
+					$provider[0] ='microsoft'; 					
+					$provider[1] ='babelfish';
+					
+					$config = parse_ini_file('config_mapper.ini');
+					$proxy =$config['proxy'];
 					//Once only Babelfish 2011-11-04//for ($i=0; $i<=2; $i++)
-					//MS Bing is added 2011-11-04 //for ($i=0; $i<=1; $i++)
 						for ($i=0; $i<=1; $i++){			
 							$preferred_provider=$provider[$i];
 							
@@ -113,6 +113,7 @@ public function processXLIFF($xliff){
 							   	$alt_trans->appendChild($root_attr1);
 							   	$root_text = $doc->createTextNode($phasename);
 							   	$root_attr1->appendChild($root_text); 
+							 
 				//2011-11-05
 								$source_element=$doc->createElement('source', $text);
 								$alt_trans->appendChild($source_element);
@@ -134,7 +135,9 @@ public function processXLIFF($xliff){
 			}
 		$doc->formatOutput = true;//this line format output when browsing HTML source. 
 		$data = $doc->saveXML();
+	
 		return $data;
+
 }
 }
 ?>

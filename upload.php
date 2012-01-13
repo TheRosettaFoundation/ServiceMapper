@@ -1,5 +1,4 @@
 <?php
-		// desplay all php errors
 		 error_reporting(E_ALL);
 		 ini_set("display_errors", 1);
 		 
@@ -8,8 +7,9 @@
 		$option=$_POST['select'];
 		$allowed_filetypes = array('.xlf'); // These will be the types of file that will pass the validation.	  
 		$max_filesize = 524288; // Maximum filesize in BYTES
-		$upload_path = 'c:\uploads'; // The place the files will be uploaded to
-		//$upload_path ='/Users/naotonishio/Documents';
+		
+		$config = parse_ini_file('config_mapper.ini');
+		$upload_path =$config['upload_path'];
 		
 		$filename = $_FILES['userfile']['name']; // Get the name of the file (including file extension).
 		$ext = substr($filename, strpos($filename,'.'), strlen($filename)-1); // Get the extension from the filename.
@@ -206,6 +206,9 @@
 		print '</tbody></table>';
 		print '<center><p class="txt"><a id="close" href="#"> <em> hide Metadata </em> </a></p></center></div>' ;
 }   
+   
+   
+   
    if(move_uploaded_file($tmpName,$upload_path . $filename)){
    
 	$name=date('m-d-Y-His');
@@ -223,13 +226,12 @@
 		header("Content-type: text/xml");
 		$xlif = new XLIFF();
 				$processedFile=trim($xlif->processXLIFF($content));
-				echo $processedFile = str_replace("&#xFEFF;", "", $processedFile);//Spanish characters (diacritics)
+				print $processedFile = str_replace("&#xFEFF;", "", $processedFile);//Spanish characters (diacritics)
 
 		}
 	
 		else{
-			header('Content-Type: text/html; charset=utf-8');	
-			
+			header('Content-Type: text/html; charset=utf-8');		
 ?>
 			
 						<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -266,9 +268,9 @@
 						</div>
 						</div>
 						</body></html>
-<?php		
+<?php			
 			}
-		} //It worked.
+		} 
       else
          echo 'There was an error during the file upload.  Please try again.'; // It failed :(.
 ?>
