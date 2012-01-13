@@ -85,64 +85,59 @@ class XLIFF {
 		
  		$transUnits = $doc->getElementsByTagName( 'trans-unit' );
 
-	   foreach($transUnits as $transUnit ){
-				  $transID = $transUnit->getAttribute('id');
-				  $sources = $transUnit->getElementsByTagName( "source" );
-				  $text = $sources->item(0)->nodeValue;
-				$string1= new MTConnect();
-					$provider[0] ='microsoft'; 					
-					$provider[1] ='babelfish';
+		foreach($transUnits as $transUnit ){
+			$transID = $transUnit->getAttribute('id');
+			$sources = $transUnit->getElementsByTagName( "source" );
+			$text = $sources->item(0)->nodeValue;
+			$string1= new MTConnect();
+			$provider[0] ='microsoft'; 					
+			$provider[1] ='babelfish';
+			$config = parse_ini_file('config_mapper.ini');
+			$proxy =$config['proxy'];
+			for ($i=0; $i<=count($provider); $i++){			
+				$preferred_provider=$provider[$i];		
+				if (trim($text)!=""){								
+					$translation=$string1->translate($source, $target, trim($text), $preferred_provider,$proxy);
 					
-					$config = parse_ini_file('config_mapper.ini');
-					$proxy =$config['proxy'];
-					//Once only Babelfish 2011-11-04//for ($i=0; $i<=2; $i++)
-						for ($i=0; $i<=count($provider); $i++){			
-							$preferred_provider=$provider[$i];
-							
-							if (trim($text)!=""){								
-								$translation=$string1->translate($source, $target, trim($text), $preferred_provider,$proxy);
-								
-							 	$alt_trans=$doc->createElement('alt-trans');
-								$transUnit->appendChild($alt_trans);
-							   	
-								$root_attr1 = $doc->createAttribute('tool-id');
-							   	$alt_trans->appendChild($root_attr1);
-							   	$root_text = $doc->createTextNode($toolid);
-							   	$root_attr1->appendChild($root_text); 
-							
-							   	$root_attr2 = $doc->createAttribute('origin');
-								$alt_trans->appendChild($root_attr2);
-							
-							   	$root_text = $doc->createTextNode($preferred_provider);
-							   	$root_attr2->appendChild($root_text); 
-							   	
-							   	$root_attr1 = $doc->createAttribute('phase-name');
-							   	$alt_trans->appendChild($root_attr1);
-							   	$root_text = $doc->createTextNode($phasename);
-							   	$root_attr1->appendChild($root_text); 
-							 
-				//2011-11-05
-								$source_element=$doc->createElement('source', $text);
-								$alt_trans->appendChild($source_element);
-								
-								$attr1 = $doc->createAttribute('xml:lang');
-							   	$source_element->appendChild($attr1);
-							   	$root_text = $doc->createTextNode($source_xx);
-							   	$attr1->appendChild($root_text); 
-								
-							   	$target_element=$doc->createElement('target', $translation);
-								$alt_trans->appendChild($target_element);
-							   	
-							   	$attr2 = $doc->createAttribute('xml:lang');
-							   	$target_element->appendChild($attr2);
-							   	$root_text = $doc->createTextNode($target_xx);
-							   	$attr2->appendChild($root_text); 
-						   	}
-						}
+					$alt_trans=$doc->createElement('alt-trans');
+					$transUnit->appendChild($alt_trans);
+					
+					$root_attr1 = $doc->createAttribute('tool-id');
+					$alt_trans->appendChild($root_attr1);
+					$root_text = $doc->createTextNode($toolid);
+					$root_attr1->appendChild($root_text); 
+				
+					$root_attr2 = $doc->createAttribute('origin');
+					$alt_trans->appendChild($root_attr2);
+				
+					$root_text = $doc->createTextNode($preferred_provider);
+					$root_attr2->appendChild($root_text); 
+					
+					$root_attr1 = $doc->createAttribute('phase-name');
+					$alt_trans->appendChild($root_attr1);
+					$root_text = $doc->createTextNode($phasename);
+					$root_attr1->appendChild($root_text); 
+				 
+					$source_element=$doc->createElement('source', $text);
+					$alt_trans->appendChild($source_element);
+					
+					$attr1 = $doc->createAttribute('xml:lang');
+					$source_element->appendChild($attr1);
+					$root_text = $doc->createTextNode($source_xx);
+					$attr1->appendChild($root_text); 
+					
+					$target_element=$doc->createElement('target', $translation);
+					$alt_trans->appendChild($target_element);
+					
+					$attr2 = $doc->createAttribute('xml:lang');
+					$target_element->appendChild($attr2);
+					$root_text = $doc->createTextNode($target_xx);
+					$attr2->appendChild($root_text); 
+				}
 			}
 		}
-		$doc->formatOutput = true;//this line format output when browsing HTML source. 
-		$data = $doc->saveXML();
-	
-		return $data;
+	}
+	$doc->formatOutput = true;//this line format output when browsing HTML source. 
+	$data = $doc->saveXML();
+	return $data;
 }

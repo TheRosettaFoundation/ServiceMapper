@@ -70,13 +70,13 @@ class MTConnect{
 		
 		$lp=$b_slang.'_'.$b_tlang;
 				
-	$request = new HTTP_Request2('http://babelfish.yahoo.com/translate_txt', HTTP_Request2::METHOD_POST);
-	$request->setMethod(HTTP_Request2::METHOD_POST)
-		->setHeader('Accept-Charset', 'utf-8')
-		->addPostParameter('ei', 'UTF-8')
-		->addPostParameter('lp', $lp)
-		->addPostParameter('trtext', $text);
-		
+		$request = new HTTP_Request2('http://babelfish.yahoo.com/translate_txt', HTTP_Request2::METHOD_POST);
+		$request->setMethod(HTTP_Request2::METHOD_POST)
+			->setHeader('Accept-Charset', 'utf-8')
+			->addPostParameter('ei', 'UTF-8')
+			->addPostParameter('lp', $lp)
+			->addPostParameter('trtext', $text);
+			
 		try{
 			$response=$request->send();
 				if (200 == $response->getStatus()){
@@ -131,6 +131,5 @@ class MTConnect{
 		$sFile = file_get_contents('http://api.microsofttranslator.com/V1/Http.svc/Translate?appId=B762C414CF08D83A6715EEB0171C4BF6E1AF0490&text='.$query, False, $cxContext);
 		
 		return $sFile;		
-	}
-	
-} 
+	}	
+}
