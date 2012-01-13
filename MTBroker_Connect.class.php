@@ -30,8 +30,8 @@ class MTConnect{
 		return $ret;
 	}
 		
-	private function babelFish($source,$target,$text,$proxy){       	
-		require_once 'HTTP'.DIRECTORY_SEPARATOR.'Request2.php'; // uses Pear for MacOSX
+	/*private function babelFish($source,$target,$text,$proxy){       	
+		
 
 		//Proxy switch Naoto 2010-03-20
 		if ($proxy=='ul'){
@@ -58,8 +58,10 @@ class MTConnect{
 		
 		return $sFile;		
 	}
+*/
 
 	private function babelFish($source,$target,$text,$proxy){       
+		require_once 'HTTP'.DIRECTORY_SEPARATOR.'Request2.php'; // uses Pear for MacOSX
 		//require_once 'HTTP\Request2.php'; // uses Pear for Windows.
 		$b_slang=strtoupper($source);
 		$b_tlang=strtoupper($target);
