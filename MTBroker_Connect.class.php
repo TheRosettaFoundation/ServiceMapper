@@ -76,11 +76,14 @@ class MTConnect{
 		$b_tlang=$arr[$b_tlang];
 		
 		//Proxy switch Naoto 2010-03-20
-		if ($proxy=='ul')
-		{
+		if ($proxy=='true'){
+			$config = parse_ini_file('config.ini');
+			$proxy ='tcp://'.$config['proxy_address'];	
+
 			$aContext = array(
 			'http' => array(
-			   	'proxy' => 'tcp://staff-proxy.ul.ie:8080', // This needs to be the server and the port of the NTLM Authentication Proxy Server.
+					'proxy' =>$proxy,
+			   	//'proxy' => 'tcp://staff-proxy.ul.ie:8080', // This needs to be the server and the port of the NTLM Authentication Proxy Server.
 			    'request_fulluri' => True,
 			    ),
 			);
