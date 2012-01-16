@@ -7,7 +7,6 @@ class MTConnect{
 	 */
 	 
 	//Proxy switch for MicrosoftTraslator Naoto 2010-03-20	 
-	//var $use_proxy = false;
 	
 	/* 
 	 * Main machine translation method. Must be called with the following parameters:
@@ -15,7 +14,7 @@ class MTConnect{
 	 * $target: target language string, e.g. "spanish"
 	 * $text: text string to be translated.
 	 * Optional Parameters.
-	 * $preferred_provided: set to "babelfish" (default).
+	 * $preferred_provided: set to "Bing translator" (default).
 	 * $proxy: set to "ul" (default), or "".
 	 */
 	public function translate($source, $target, $text, $preferred_provider = '', $proxy = ''){
