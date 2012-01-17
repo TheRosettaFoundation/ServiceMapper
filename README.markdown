@@ -23,6 +23,12 @@ On 2011/Nov only MTBroker_Connect has been developed connecting Babelfish MT pro
     sudo apt-get install php-pear
     sudo pear install HTTP_Request2
 
+### Setup
+
+* Copy config.template.ini to config.ini.
+    cp config.template.ini config.ini
+* Enter your settings in config.ini
+
 ## How it works
 * Call index.html
   * Standalone component
