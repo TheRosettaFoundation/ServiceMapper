@@ -136,7 +136,6 @@ class XLIFF {
 					$attr2->appendChild($root_text); 
 					
 					$translation = "";
-					//$text = "";
 				}
 			}
 		}
