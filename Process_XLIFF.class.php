@@ -134,6 +134,9 @@ class XLIFF {
 					$target_element->appendChild($attr2);
 					$root_text = $doc->createTextNode($target_xx);
 					$attr2->appendChild($root_text); 
+					
+					$translation = "";
+					$text = "";
 				}
 			}
 		}
