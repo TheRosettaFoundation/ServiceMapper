@@ -2,13 +2,8 @@
 class MTConnect{
 	/*MTBroker to MTConnect
 	 * Public function allowing us to translate a piece of string.
-	 *
 	 * @returns: A string of translated text.
-	 */
-	 
-	//Proxy switch for MicrosoftTraslator Naoto 2010-03-20	 
-	
-	/* 
+     * Proxy switch for MicrosoftTraslator Naoto 2010-03-20	 
 	 * Main machine translation method. Must be called with the following parameters:
 	 * $source: source language string, e.g. "english"
 	 * $target: target language string, e.g. "spanish"
@@ -76,14 +71,13 @@ class MTConnect{
 		$b_tlang=$arr[$b_tlang];
 		
 		//Proxy switch Naoto 2010-03-20
-		if ($proxy=='true'){
+		if ($proxy){
 			$config = parse_ini_file('config.ini');
 			$proxy ='tcp://'.$config['proxy_address'];	
 
 			$aContext = array(
 			'http' => array(
 					'proxy' =>$proxy,
-			   	//'proxy' => 'tcp://staff-proxy.ul.ie:8080', // This needs to be the server and the port of the NTLM Authentication Proxy Server.
 			    'request_fulluri' => True,
 			    ),
 			);
@@ -97,7 +91,6 @@ class MTConnect{
 			    ),
 			);
 		}
-		//Proxy switch Naoto 2010-03-20
 	    
 		$cxContext = stream_context_create($aContext);	
 		$query = urlencode($text).'&from='.urlencode($b_slang).'&to='.urlencode($b_tlang);
