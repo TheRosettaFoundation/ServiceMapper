@@ -12,11 +12,12 @@ class MTConnect{
 	 * $preferred_provided: set to "Bing translator" (default).
 	 * $proxy: set to "ul" (default), or "".
 	 */
-	public function translate($source, $target, $text, $preferred_provider = '', $proxy = ''){
-		$ret = '';	
-		if ($preferred_provider == "babelfish")
+	public function translate($source, $target, $text, $preferred_provider, $proxy){
+		$ret = '';
+		
+		if ($preferred_provider == 'Yahoo! Babelfish')
 			$ret = $this->babelFish($source,$target,$text,$proxy);				
-		elseif ($preferred_provider == "microsoft")	
+		elseif ($preferred_provider == 'Microsoft Bing Translator')	
 			$ret = $this->msTranslator($source,$target,$text,$proxy);			
 		else
 			$ret = $this->msTranslator($source,$target,$text,$proxy);

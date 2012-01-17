@@ -7,6 +7,7 @@ include_once "MTBroker_Connect.class.php";
  * Description: [missing]
  */
 class XLIFF {
+	var $proxy = 'false';
 	public function processXLIFF($xliff) {
 		$toolid='MT';
 		$phasename='MT-Leverage';
