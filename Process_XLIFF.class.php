@@ -90,8 +90,8 @@ class XLIFF {
 			$sources = $transUnit->getElementsByTagName( "source" );
 			$text = $sources->item(0)->nodeValue;
 			$string1= new MTConnect();
-			$provider[0] ='microsoft'; 					
-			$provider[1] ='babelfish';
+			$provider[0] ='Microsoft Bing Translator'; 					
+			$provider[1] ='Yahoo! Babelfish';
 			$config = parse_ini_file('config.ini');
 			$proxy =$config['proxy'];
 			
