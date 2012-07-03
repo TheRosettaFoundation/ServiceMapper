@@ -14,22 +14,21 @@ class MTConnect{
 	 */
 	public function translate($source, $target, $text, $preferred_provider, $proxy){
 		$ret = '';
-		
+        
 		if ($preferred_provider == 'Yahoo! Babelfish')
 			$ret = $this->babelFish($source,$target,$text,$proxy);				
 		elseif ($preferred_provider == 'Microsoft Bing Translator')	
 			$ret = $this->msTranslator($source,$target,$text,$proxy);			
 		else
 			$ret = $this->msTranslator($source,$target,$text,$proxy);
-			//$ret = $this->babelFish($source,$target,$text,$proxy);		
 		return $ret;
 	}
 
 	private function babelFish($source,$target,$text,$proxy){       
 		require_once 'HTTP'.DIRECTORY_SEPARATOR.'Request2.php'; 
-		$b_slang=strtoupper($source);
-		$b_tlang=strtoupper($target);
-		$arr= parse_ini_file("languages.ini");
+		$b_slang=strtolower($source);
+		$b_tlang=strtolower($target);
+		$arr= parse_ini_file("demolangs.ini");
 		
 		$b_slang=$arr[$b_slang]; 
 		$b_tlang=$arr[$b_tlang];
@@ -63,14 +62,20 @@ class MTConnect{
 	}
 	
 	private function msTranslator($source,$target,$text,$proxy){
-		
-		$b_slang=strtoupper($source);
-		$b_tlang=strtoupper($target);
-		$arr= parse_ini_file("languages.ini");
-	
-		$b_slang=$arr[$b_slang]; 
-		$b_tlang=$arr[$b_tlang];
-		
+		//Source and target languages must be in language code form
+        $b_slang=strtolower($source);
+		$b_tlang=strtolower($target);
+		$language_codes = parse_ini_file("demolangs.ini");
+        $language_names = parse_ini_file("languages.ini");
+
+        if(!isset($language_codes[$b_slang])) {
+            $b_slang = $language_names[strtoupper($b_slang)];
+        }
+
+        if(!isset($language_codes[$b_tlang])) {
+            $b_tlang = $language_names[strtoupper($b_tlang)];
+        }
+
 		//Proxy switch Naoto 2010-03-20
 		if ($proxy){
 			$config = parse_ini_file('config.ini');
@@ -87,15 +92,14 @@ class MTConnect{
 		{
 			$aContext = array(
 			'http' => array(
-			   	//'proxy' => 'tcp://staff-proxy.ul.ie:8080', // This needs to be the server and the port of the NTLM Authentication Proxy Server.
 			    'request_fulluri' => True,
 			    ),
 			);
 		}
 	    
 		$cxContext = stream_context_create($aContext);	
-		$query = urlencode($text).'&from='.urlencode($b_slang).'&to='.urlencode($b_tlang);
-		$sFile = file_get_contents('http://api.microsofttranslator.com/V1/Http.svc/Translate?appId=B762C414CF08D83A6715EEB0171C4BF6E1AF0490&text='.$query, False, $cxContext);
+		$query = urlencode($text).'&from='.$b_slang.'&to='.$b_tlang;
+		$sFile = file_get_contents('http://api.microsofttranslator.com/V2/Http.svc/Translate?appId=B762C414CF08D83A6715EEB0171C4BF6E1AF0490&text='.$query, False, $cxContext);
 		
 		return $sFile;		
 	}	

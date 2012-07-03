@@ -7,8 +7,9 @@ include_once "MTBroker_Connect.class.php";
  * Description: [missing]
  */
 class XLIFF {
-	var $proxy = 'false';
+	var $proxy = false;
 	public function processXLIFF($xliff) {
+        $proxy = false;
 		$toolid='MT';
 		$phasename='MT-Leverage';
 		$doc = new DOMDocument();
@@ -21,9 +22,9 @@ class XLIFF {
 			$target_xx =  $file->getAttribute('target-language');
 		}
 	  
-	  	$arr= parse_ini_file("demolangs.ini");
-		$source=$arr[$source_xx]; 
-		$target=$arr[$target_xx];
+	  	$arr= parse_ini_file("languages.ini");
+		$source=$arr[strtoupper($source_xx)]; 
+		$target=$arr[strtoupper($target_xx)];
 		$phasegroups = $doc->getElementsByTagName('phase-group');
 			
 		foreach($phasegroups as $phasegroup){
@@ -92,9 +93,11 @@ class XLIFF {
 			$text = $sources->item(0)->nodeValue;
 			$string1= new MTConnect();
 			$provider[0] ='Microsoft Bing Translator'; 					
-			$provider[1] ='Yahoo! Babelfish';
+			//$provider[1] ='Yahoo! Babelfish';
 			$config = parse_ini_file('config.ini');
-			$proxy =$config['proxy'];
+            if(isset($config['proxy']) && $config['proxy'] != '') {
+    			$proxy =$config['proxy'];
+            }
 			
 			for ($i=0; $i < count($provider); $i++){			
 				$preferred_provider=$provider[$i];		
