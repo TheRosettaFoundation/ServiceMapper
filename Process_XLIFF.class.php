@@ -103,6 +103,9 @@ class XLIFF {
 				$preferred_provider=$provider[$i];		
 				if (trim($text)!=""){								
 					$translation=$string1->translate($source, $target, trim($text), $preferred_provider,$proxy);
+
+                    //strip any tags picked up during translation
+                    $translation = strip_tags($translation);
 					
 					$alt_trans=$doc->createElement('alt-trans');
 					$transUnit->appendChild($alt_trans);
