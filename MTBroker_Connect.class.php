@@ -1,4 +1,5 @@
 <?php	
+require_once 'providers/moses_en_es_europarlService.php';
 class MTConnect{
 	/*MTBroker to MTConnect
 	 * Public function allowing us to translate a piece of string.
@@ -18,7 +19,12 @@ class MTConnect{
 		if ($preferred_provider == 'Yahoo! Babelfish')
 			$ret = $this->babelFish($source,$target,$text,$proxy);				
 		elseif ($preferred_provider == 'Microsoft Bing Translator')	
-			$ret = $this->msTranslator($source,$target,$text,$proxy);			
+			$ret = $this->msTranslator($source,$target,$text,$proxy);
+                elseif ($preferred_provider == 'moses_en_es_europarlService'){
+                        $provider= new moses_en_es_europarlService();
+                        $result = $provider->translate($source, $target, $text);
+                        $ret=$result->output;
+                }
 		else
 			$ret = $this->msTranslator($source,$target,$text,$proxy);
 		return $ret;
