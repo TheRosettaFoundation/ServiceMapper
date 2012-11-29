@@ -11,9 +11,9 @@
  * @author sean
  */
 class ProviderHelper {
-    private static function autoRequire(array $providers) {
+    private static function autoRequire(array $providers,$root="providers") {
         foreach($providers as $provider){
-            require ProviderHelper::getSetting("providers").$provider;
+            require ProviderHelper::getSetting($root).$provider;
         }
     }
     
