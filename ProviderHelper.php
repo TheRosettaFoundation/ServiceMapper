@@ -26,6 +26,10 @@ class ProviderHelper {
         return $config[$setting];	
     }
     
+    /**
+     *
+     * @return IProvider 
+     */
     public static function loadAllProviders(){
         $providerNames = ProviderHelper::readProviders();
         ProviderHelper::autoRequire($providerNames);

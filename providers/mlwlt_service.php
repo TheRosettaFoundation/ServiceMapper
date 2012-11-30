@@ -1,4 +1,5 @@
 <?php
+
 class mlwlt_xliff_mt_echo {
   public $xliff_input; // base64Binary
   public $fileName; // string
@@ -17,7 +18,7 @@ class mlwlt_xliff_mt_prepareResponse {
   public $mlwlt_xliff_mt_prepareResult; // base64Binary
 }
 
-
+require_once '../IProvider.php';
 /**
  * mlwlt_service class
  * 
@@ -27,7 +28,7 @@ class mlwlt_xliff_mt_prepareResponse {
  * @copyright {copyright}
  * @package   {package}
  */
-class mlwlt_service extends SoapClient {
+class mlwlt_service extends SoapClient implements IProvider {
 
   private static $classmap = array(
                                     'mlwlt_xliff_mt_echo' => 'mlwlt_xliff_mt_echo',
