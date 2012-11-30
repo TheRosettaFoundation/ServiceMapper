@@ -13,12 +13,17 @@
 class ProviderHelper {
     private static function autoRequire(array $providers,$root="providers") {
         foreach($providers as $provider){
-            require ProviderHelper::getSetting($root).$provider;
+            require_once ProviderHelper::getSetting($root).$provider.".php";
         }
     }
     
     private static function readProviders(){
-        return scandir(ProviderHelper::getSetting("providers"));    
+        $temp= scandir(ProviderHelper::getSetting("providers"));
+        $ret=array();
+        foreach ($temp as $provider) {
+            if($provider!="."&&$provider!="..") $ret[]=substr($provider, 0, sizeof($provider)-5);
+        }
+        return $ret;
     }
     
     public static function getSetting($setting,$file="config.ini"){

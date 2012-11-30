@@ -1,6 +1,7 @@
 <?php
 
 include_once "MTBroker_Connect.class.php";
+require_once 'ProviderHelper.php';
 /**
  * Class XLIFF
  *
@@ -21,10 +22,11 @@ class XLIFF {
                 $source_xx = $file->getAttribute('source-language');
                 $target_xx =  $file->getAttribute('target-language');
         }
-
-        $arr= parse_ini_file("languages.ini");
-        $source=$arr[strtoupper($source_xx)]; 
-        $target=$arr[strtoupper($target_xx)];
+        $source=$source_xx;
+        $target=$target_xx;
+//        $arr= parse_ini_file("languages.ini");
+//        $source=$arr[strtoupper($source_xx)]; 
+//        $target=$arr[strtoupper($target_xx)];
         $phasegroups = $doc->getElementsByTagName('phase-group');
 
         foreach($phasegroups as $phasegroup){
@@ -86,71 +88,93 @@ class XLIFF {
         }
 
         $transUnits = $doc->getElementsByTagName( 'trans-unit' );
-
-        foreach($transUnits as $transUnit ){
-                $transID = $transUnit->getAttribute('id');
-                $sources = $transUnit->getElementsByTagName( "source" );
-                $text = $sources->item(0)->nodeValue;
-                $string1= new MTConnect();
-                $provider[] ='Microsoft Bing Translator';
-                $temp= new moses_en_es_europarlService();     
-                if(in_array($target,$temp->getTargetLanguages())&&in_array($source,$temp->getSourceLanguages())){
-                    $provider[] ='moses_en_es_europarlService';
-                }
-
-                //$provider[1] ='Yahoo! Babelfish';
-                $config = parse_ini_file('config.ini');
-        if(isset($config['proxy']) && $config['proxy'] != '') {
-                    $proxy =$config['proxy'];
+        $provider = array();
+        $provider[] ='Microsoft Bing Translator';
+        $providers = ProviderHelper::loadAllProviders();
+        foreach($providers as $p){
+            $tlangs=array();
+            foreach ($p->getTargetLanguages() as $tlang){
+                if(strpos($tlang, "-")!=false){
+                    $tlang=explode("-",$tlang);
+                    $tlang=$tlang[0];
+                }$tlangs[]=$tlang;
+            }
+            $slangs=array();
+            foreach ($p->getSourceLanguages() as $slang){
+                if(strpos($slang, "-")!=false){
+                    $slang=explode("-",$slang);
+                    $slang=$slang[0];
+                }$slangs[]=$slang;
+            }
+            $tempSource =$source;
+            if(strpos($tempSource, "-")!=false){
+                $tempSource=explode("-",$tempSource);
+                $tempSource=$tempSource[0];
+            }
+           $tempTarget =$target;
+            if(strpos($tempTarget, "-")!=false){
+                $tempTarget=explode("-",$tempTarget);
+                $tempTarget=$tempTarget[0];
+            }
+            if(in_array($tempTarget,$tlangs)&&in_array($tempSource,$slangs))$provider[]=$p;
         }
-
-                for ($i=0; $i < count($provider); $i++){			
-                        $preferred_provider=$provider[$i];		
-                        if (trim($text)!=""){								
-                                $translation=$string1->translate($source, $target, trim($text), $preferred_provider,$proxy);
-
-            //strip any tags picked up during translation
-            $translation = strip_tags($translation);
-
-                                $alt_trans=$doc->createElement('alt-trans');
-                                $transUnit->appendChild($alt_trans);
-
-                                $root_attr1 = $doc->createAttribute('tool-id');
-                                $alt_trans->appendChild($root_attr1);
-                                $root_text = $doc->createTextNode($toolid);
-                                $root_attr1->appendChild($root_text); 
-
-                                $root_attr2 = $doc->createAttribute('origin');
-                                $alt_trans->appendChild($root_attr2);
-
-                                $root_text = $doc->createTextNode($preferred_provider);
-                                $root_attr2->appendChild($root_text); 
-
-                                $root_attr1 = $doc->createAttribute('phase-name');
-                                $alt_trans->appendChild($root_attr1);
-                                $root_text = $doc->createTextNode($phasename);
-                                $root_attr1->appendChild($root_text); 
-
-                                $source_element=$doc->createElement('source', $text);
-                                $alt_trans->appendChild($source_element);
-
-                                $attr1 = $doc->createAttribute('xml:lang');
-                                $source_element->appendChild($attr1);
-                                $root_text = $doc->createTextNode($source_xx);
-                                $attr1->appendChild($root_text); 
-
-                                $target_element=$doc->createElement('target', $translation);
-                                $alt_trans->appendChild($target_element);
-
-                                $attr2 = $doc->createAttribute('xml:lang');
-                                $target_element->appendChild($attr2);
-                                $root_text = $doc->createTextNode($target_xx);
-                                $attr2->appendChild($root_text); 
-
-                                $translation = "";
-                        }
-                }
-        }
+//        foreach($transUnits as $transUnit ){
+//                $transID = $transUnit->getAttribute('id');
+//                $sources = $transUnit->getElementsByTagName( "source" );
+//                $text = $sources->item(0)->nodeValue;
+//                $string1= new MTConnect();
+//                $config = parse_ini_file('config.ini');
+//                if(isset($config['proxy']) && $config['proxy'] != '') {
+//                            $proxy =$config['proxy'];
+//                }
+//
+//                for ($i=0; $i < count($provider); $i++){			
+//                        $preferred_provider=$provider[$i];		
+//                        if (trim($text)!=""){								
+//                                $translation=$string1->translate($source, $target, trim($text), $preferred_provider,$proxy);
+//
+//                                //strip any tags picked up during translation
+//                                $translation = strip_tags($translation);
+//
+//                                $alt_trans=$doc->createElement('alt-trans');
+//                                $transUnit->appendChild($alt_trans);
+//
+//                                $root_attr1 = $doc->createAttribute('tool-id');
+//                                $alt_trans->appendChild($root_attr1);
+//                                $root_text = $doc->createTextNode($toolid);
+//                                $root_attr1->appendChild($root_text); 
+//
+//                                $root_attr2 = $doc->createAttribute('origin');
+//                                $alt_trans->appendChild($root_attr2);
+//
+//                                $root_text = $doc->createTextNode($preferred_provider);
+//                                $root_attr2->appendChild($root_text); 
+//
+//                                $root_attr1 = $doc->createAttribute('phase-name');
+//                                $alt_trans->appendChild($root_attr1);
+//                                $root_text = $doc->createTextNode($phasename);
+//                                $root_attr1->appendChild($root_text); 
+//
+//                                $source_element=$doc->createElement('source', $text);
+//                                $alt_trans->appendChild($source_element);
+//
+//                                $attr1 = $doc->createAttribute('xml:lang');
+//                                $source_element->appendChild($attr1);
+//                                $root_text = $doc->createTextNode($source_xx);
+//                                $attr1->appendChild($root_text); 
+//
+//                                $target_element=$doc->createElement('target', $translation);
+//                                $alt_trans->appendChild($target_element);
+//
+//                                $attr2 = $doc->createAttribute('xml:lang');
+//                                $target_element->appendChild($attr2);
+//                                $root_text = $doc->createTextNode($target_xx);
+//                                $attr2->appendChild($root_text); 
+//
+//                                $translation = "";
+//                        }
+//                }
+//        }
 	$doc->formatOutput = true;//this line format output when browsing HTML source. 
 	$data = $doc->saveXML();
 	return $data;

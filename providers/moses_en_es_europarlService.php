@@ -5,7 +5,7 @@ mb_internal_encoding('UTF-8');
 if(file_exists("IProvider.php")) {
     require_once 'IProvider.php';
 } else {
-    require_once '../IProvider.php';
+    require_once 'IProvider.php';
 }
 
 class SequenceFormat {
@@ -320,7 +320,8 @@ class moses_en_es_europarlService extends SoapClient implements IProvider{
    public function translateFile($fileText, $sourceLanguage, $targetLanguage) {
 
         $doc = new DOMDocument();
-        if($doc->load($fileText)) {
+        
+        if($doc->loadXML($fileText)) {
             if($transUnits = $doc->getElementsByTagName("trans-unit")) {
                 foreach($transUnits as $transUnit ){                        
                     $source = $transUnit->getElementsByTagName("source");
@@ -371,6 +372,6 @@ class moses_en_es_europarlService extends SoapClient implements IProvider{
   }
 
 }
-$test = new moses_en_es_europarlService();
-echo $test->translateFile("/home/manuel/Desktop/ExampleDocs/lucia/Symposium3.xlf","en","es");
-//echo $test->translate("en", "es",  "I am happy. Are you happy too?");
+//$test = new moses_en_es_europarlService();
+//echo $test->translateFile("/home/manuel/Desktop/ExampleDocs/lucia/Symposium3.xlf","en","es");
+////echo $test->translate("en", "es",  "I am happy. Are you happy too?");
