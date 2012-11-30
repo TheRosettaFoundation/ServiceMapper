@@ -1,4 +1,5 @@
-<?php
+<?PHP
+
 include("MTBroker_Connect.class.php");
 include("Process_XLIFF.class.php");
 $locConnect='http://193.1.97.50/locconnect/';

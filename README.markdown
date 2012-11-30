@@ -41,3 +41,10 @@ On 2011/Nov only MTBroker_Connect has been developed connecting Babelfish MT pro
   * It reads apipmui.php
 
 The rest of the files are used for processing XLIFF files and for translation process.
+
+##Development/Testing with Chromium - Firefox not affected
+Chromium doesn't play nice with ajax and localhost testing.
+To work around this issue: Run chromium with --allow-file-access-from-files to avoid "Origin null is not allowed by Access-Control-Allow-Origin" error(s).
+Further reading on this issue here: (TLDR: using ajax with local resources isn't going to work cross-browser)
+http://stackoverflow.com/questions/8456538/origin-null-is-not-allowed-by-access-control-allow-origin/8456586#8456586
+

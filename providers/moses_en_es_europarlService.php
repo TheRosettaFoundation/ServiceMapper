@@ -1,4 +1,8 @@
 <?php
+
+
+
+mb_internal_encoding("UTF-8");
 class SequenceFormat {
 }
 
@@ -309,6 +313,41 @@ class moses_en_es_europarlService extends SoapClient {
       );
   }
   
+   public function translateFile($fileText,$sourceLanguage=null,$targetLanguage=null){
+
+        $doc = new DOMDocument();
+        if($doc->load($fileText)) {
+            if($transUnits = $doc->getElementsByTagName("trans-unit")) {
+                foreach($transUnits as $transUnit ){                        
+                    $source = $transUnit->getElementsByTagName("source");
+                    $text = $source->item(0)->nodeValue;
+                    
+                    $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
+                    $translation = strip_tags($translation);
+                    $alt_trans = $doc->createElement("alt-trans");
+                    
+                    $alt_trans->appendChild($doc->createTextNode($translation));
+                   
+                    $transUnit->appendChild($alt_trans);           
+                    
+                    
+                    
+                }   
+            }                     
+        } else {
+            echo "Failed to load file. Check path/permissions.";
+        }
+        $doc->formatOutput = true;
+        if($data = $doc->saveXML()) {
+             return $data;
+        } else {
+            echo "Failed to dump XML tree to string";
+        }
+        
+
+  }
+  
+  
   public function translate($source,$target,$text){
     $parameters = new appInputs();
     $parameters->input_direct_data=$text;
@@ -318,6 +357,8 @@ class moses_en_es_europarlService extends SoapClient {
     $parameters->norecase = true;
     $parameters->notokenize=false;
     $result = $this->runAndWaitFor($parameters);
+    
+    return iconv("ISO-8859-1", "UTF-8", $result->output);
   }
   
   public function getTargetLanguages(){
@@ -328,4 +369,6 @@ class moses_en_es_europarlService extends SoapClient {
   }
 
 }
-?>
+$test = new moses_en_es_europarlService();
+echo $test->translateFile("/home/manuel/Desktop/ExampleDocs/lucia/Symposium3.xlf","en","es");
+//echo $test->translate("en", "es",  "I am happy. Are you happy too?");

@@ -1,4 +1,5 @@
 <?php
+mb_internal_encoding("UTF-8");
 class mlwlt_xliff_mt_echo {
   public $xliff_input; // base64Binary
   public $fileName; // string
@@ -73,13 +74,16 @@ class mlwlt_service extends SoapClient {
       );
   }
 
+  
+   public function translateFile($Filetext,$source=null,$target=null){
+    $provider = new mlwlt_service();
+    $data = new mlwlt_xliff_mt_echo();
+    $data->xliff_input = base64_encode($Filetext);
+    $result = $provider->mlwlt_xliff_mt_echo($data);
+    return base64_decode($result->mlwlt_xliff_mt_echoResult);
+  }
 }
-$provider = new mlwlt_service();
-$data = new mlwlt_xliff_mt_prepare();
-//$data->fileName ='TheBritishGrenadiers.txt.xlf';
-//$data->xliff_input = base64_encode(file_get_contents("/home/sean/Desktop/TheBritishGrenadiers.txt.xlf"));
-$data->fileName ='sample.xlf';
-$data->xliff_input = base64_encode(file_get_contents("/home/sean/Desktop/SampleFile.xlf"));
-$result = $provider->mlwlt_xliff_mt_prepare($data);
-echo base64_decode($result->mlwlt_xliff_mt_prepareResult);
+$temp = new mlwlt_service();
+echo $temp->translateFile(file_get_contents("/home/manuel/Desktop/ExampleDocs/XLIFF/9769d8e842-WFR.xlf"));
+
 ?>
