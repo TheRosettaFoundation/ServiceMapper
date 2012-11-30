@@ -1,8 +1,13 @@
 <?php
 
-
+if(file_exists("IProvider.php")) {
+    require_once 'IProvider.php';
+} else {
+    require_once '../IProvider.php';
+}
 
 mb_internal_encoding("UTF-8");
+
 class SequenceFormat {
 }
 
@@ -110,7 +115,6 @@ class getResultsInfoRequest {
   public $jobId; // jobId
 }
 
-require_once '../IProvider.php';
 /**
  * moses_en_es_europarlService class
  * 
@@ -325,14 +329,14 @@ class moses_en_es_europarlService extends SoapClient implements IProvider{
                     $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
                     $translation = strip_tags($translation);
                     $alt_trans = $doc->createElement("alt-trans");
-                    
-                    $alt_trans->appendChild($doc->createTextNode($translation));
-                   
-                    $transUnit->appendChild($alt_trans);           
-                    
-                    
-                    
-                }   
+                    $transUnit->appendChild($alt_trans);  
+                    $clone=$source->item(0)->cloneNode(true);
+                    $alt_trans->appendChild($clone);
+                    $altTarget = $doc->createElement("target");
+                    $altTarget->setAttribute("xml:lang", $targetLanguage);
+                    $altTarget->appendChild($doc->createTextNode($translation));
+                    $alt_trans->appendChild($altTarget);                    
+                }  
             }                     
         } else {
             echo "Failed to load file. Check path/permissions.";
