@@ -1,6 +1,6 @@
 <?php
-
-mb_internal_encoding("UTF-8");
+header('Content-Type: text/html; charset=utf-8');
+mb_internal_encoding('UTF-8');
 
 class mlwlt_xliff_mt_echo {
   public $xliff_input; // base64Binary

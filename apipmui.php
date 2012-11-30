@@ -1,4 +1,6 @@
 <?PHP
+header('Content-Type: text/html; charset=utf-8');
+mb_internal_encoding('UTF-8');
 
 include("MTBroker_Connect.class.php");
 include("Process_XLIFF.class.php");

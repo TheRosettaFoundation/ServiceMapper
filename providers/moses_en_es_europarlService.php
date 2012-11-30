@@ -1,12 +1,12 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
+mb_internal_encoding('UTF-8');
 
 if(file_exists("IProvider.php")) {
     require_once 'IProvider.php';
 } else {
     require_once '../IProvider.php';
 }
-
-mb_internal_encoding("UTF-8");
 
 class SequenceFormat {
 }
@@ -317,7 +317,7 @@ class moses_en_es_europarlService extends SoapClient implements IProvider{
       );
   }
   
-   public function translateFile($fileText,$sourceLanguage=null,$targetLanguage=null){
+   public function translateFile($fileText, $sourceLanguage, $targetLanguage) {
 
         $doc = new DOMDocument();
         if($doc->load($fileText)) {
@@ -347,8 +347,6 @@ class moses_en_es_europarlService extends SoapClient implements IProvider{
         } else {
             echo "Failed to dump XML tree to string";
         }
-        
-
   }
   
   
@@ -362,7 +360,7 @@ class moses_en_es_europarlService extends SoapClient implements IProvider{
     $parameters->notokenize=false;
     $result = $this->runAndWaitFor($parameters);
     
-    return iconv("ISO-8859-1", "UTF-8", $result->output);
+    return $result->output;
   }
   
   public function getTargetLanguages(){
