@@ -1,5 +1,7 @@
 <?php
+
 mb_internal_encoding("UTF-8");
+
 class mlwlt_xliff_mt_echo {
   public $xliff_input; // base64Binary
   public $fileName; // string
@@ -18,7 +20,7 @@ class mlwlt_xliff_mt_prepareResponse {
   public $mlwlt_xliff_mt_prepareResult; // base64Binary
 }
 
-
+require_once '../IProvider.php';
 /**
  * mlwlt_service class
  * 
@@ -28,7 +30,7 @@ class mlwlt_xliff_mt_prepareResponse {
  * @copyright {copyright}
  * @package   {package}
  */
-class mlwlt_service extends SoapClient {
+class mlwlt_service extends SoapClient implements IProvider {
 
   private static $classmap = array(
                                     'mlwlt_xliff_mt_echo' => 'mlwlt_xliff_mt_echo',
@@ -82,6 +84,14 @@ class mlwlt_service extends SoapClient {
     $result = $provider->mlwlt_xliff_mt_echo($data);
     return base64_decode($result->mlwlt_xliff_mt_echoResult);
   }
+
+    public function getSourceLanguages() {
+        return array();
+    }
+
+    public function getTargetLanguages() {
+        return array();
+    }
 }
 $temp = new mlwlt_service();
 echo $temp->translateFile(file_get_contents("/home/manuel/Desktop/ExampleDocs/XLIFF/9769d8e842-WFR.xlf"));

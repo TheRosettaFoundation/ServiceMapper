@@ -110,7 +110,7 @@ class getResultsInfoRequest {
   public $jobId; // jobId
 }
 
-
+require_once '../IProvider.php';
 /**
  * moses_en_es_europarlService class
  * 
@@ -120,7 +120,7 @@ class getResultsInfoRequest {
  * @copyright {copyright}
  * @package   {package}
  */
-class moses_en_es_europarlService extends SoapClient {
+class moses_en_es_europarlService extends SoapClient implements IProvider{
 
   private static $classmap = array(
                                     'SequenceFormat' => 'SequenceFormat',
