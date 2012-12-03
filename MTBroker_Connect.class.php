@@ -15,18 +15,20 @@ class MTConnect{
 	 */
 	public function translate($source, $target, $text, $preferred_provider, $proxy){
 		$ret = '';
-        
-		if ($preferred_provider == 'Yahoo! Babelfish')
-			$ret = $this->babelFish($source,$target,$text,$proxy);				
-		elseif ($preferred_provider == 'Microsoft Bing Translator')	
-			$ret = $this->msTranslator($source,$target,$text,$proxy);
-                elseif ($preferred_provider == 'moses_en_es_europarlService'){
-                        $provider= new moses_en_es_europarlService();
-                        $result = $provider->translate($source, $target, $text);
-                        $ret=$result->output;
+                if(is_string($preferred_provider)){
+                    if ($preferred_provider == 'Yahoo! Babelfish')
+                            $ret = $this->babelFish($source,$target,$text,$proxy);				
+                    elseif ($preferred_provider == 'Microsoft Bing Translator')	
+                            $ret = $this->msTranslator($source,$target,$text,$proxy);
+                    elseif ($preferred_provider == 'moses_en_es_europarlService'){
+                            $provider= new moses_en_es_europarlService();
+                            $result = $provider->translate($source, $target, $text);
+                            $ret=$result->output;
+                    }
+                    else $ret = $this->msTranslator($source,$target,$text,$proxy);
+                } else {
+                    $ret=$preferred_provider->translateFile($text,$source,$target);
                 }
-		else
-			$ret = $this->msTranslator($source,$target,$text,$proxy);
 		return $ret;
 	}
 

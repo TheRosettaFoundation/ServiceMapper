@@ -20,7 +20,7 @@ class mlwlt_xliff_mt_prepareResponse {
   public $mlwlt_xliff_mt_prepareResult; // base64Binary
 }
 
-require_once '../IProvider.php';
+require_once 'IProvider.php';
 /**
  * mlwlt_service class
  * 
@@ -93,7 +93,7 @@ class mlwlt_service extends SoapClient implements IProvider {
         return array();
     }
 }
-$temp = new mlwlt_service();
-echo $temp->translateFile(file_get_contents("/home/manuel/Desktop/ExampleDocs/XLIFF/9769d8e842-WFR.xlf"));
+//$temp = new mlwlt_service();
+//echo $temp->translateFile(file_get_contents("/home/manuel/Desktop/ExampleDocs/XLIFF/9769d8e842-WFR.xlf"));
+//
 
-?>

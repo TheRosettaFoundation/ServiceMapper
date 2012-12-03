@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
+mb_internal_encoding('UTF-8');
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 require_once 'Process_XLIFF.class.php';		
