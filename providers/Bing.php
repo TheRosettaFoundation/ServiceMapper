@@ -13,11 +13,15 @@ class Bing extends SoapClient implements IProvider {
 
     
     public function getSourceLanguages() {
-        return array();
+        return array("ar","fi","it","ru","bg","fr","jp","sk","ca","de","ko","sl",
+            "zh-CN","zh-TW","ht","lt","sv","cs","he","nn","th","da","hi","fa","tr"
+            ,"nl","hmn","pl","uk","en","hu","pt","vi","et","id","ro");
     }
 
     public function getTargetLanguages() {
-        return array();
+          return array("ar","fi","it","ru","bg","fr","jp","sk","ca","de","ko","sl",
+            "zh-CN","zh-TW","ht","lt","sv","cs","he","nn","th","da","hi","fa","tr"
+            ,"nl","hmn","pl","uk","en","hu","pt","vi","et","id","ro");
     }
     
     public function translateFile($fileText, $sourceLanguage, $targetLanguage) {
@@ -57,8 +61,8 @@ class Bing extends SoapClient implements IProvider {
         //Source and target languages must be in language code form
         $b_slang=strtolower($source);
         $b_tlang=strtolower($target);
-        $language_codes = parse_ini_file("../demolangs.ini");
-        $language_names = parse_ini_file("../languages.ini");
+        $language_codes = parse_ini_file("demolangs.ini");
+        $language_names = parse_ini_file("languages.ini");
 
         if(!isset($language_codes[$b_slang])) {
             $b_slang = $language_names[strtoupper($b_slang)];

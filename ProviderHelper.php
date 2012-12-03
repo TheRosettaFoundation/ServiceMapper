@@ -49,6 +49,7 @@ class ProviderHelper {
         foreach ($array as $xliff){
             ProviderHelper::mergeFile($file, $xliff);
         }
+//        $file = $array[0];
     }
     
     public static function mergeFile(&$file, &$file2) { //private
@@ -78,16 +79,3 @@ class ProviderHelper {
         
     }    
 }
-$fileText = "/home/manuel/Desktop/ExampleDocs/lucia/Symposium3.xlf";
-$fileText2 = "/home/manuel/Desktop/ExampleDocs/lucia/alt-trans.xlf";
-$doc = new DOMDocument();
-$doc2 = new DOMDocument();
-if($doc->load($fileText)) {
-    if($doc2->load($fileText2)) {
-        echo ProviderHelper::mergeFile($doc, $doc2);        
-    }
-}
-
-    
-
-?>

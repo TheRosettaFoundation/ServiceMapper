@@ -86,11 +86,11 @@ class mlwlt_service extends SoapClient implements IProvider {
   }
 
     public function getSourceLanguages() {
-        return array();
+        return array("en");
     }
 
     public function getTargetLanguages() {
-        return array();
+        return array("cs","pl");
     }
 }
 //$temp = new mlwlt_service();
