@@ -53,68 +53,39 @@ class ProviderHelper {
 //        $file = $array[0];
     }
     
-    public static function mergeFile(&$file, &$file2) { //private
-        //merge altrans from file2  into file per transunit 
+    public static function mergeFile(&$fileText, &$fileText2) { //private
+        //merge altrans from file2  into file per transunit
         
+        $file = new DOMDocument();
+        $file->loadXML($fileText);
+        $file2 = new DOMDocument();
+        $file2->loadXML($fileText2);
         $transUnits = $file->getElementsByTagName("trans-unit"); 
-        $altTransUnits = $file2->getElementsByTagName("alt-trans");   
+        $transUnits2 = $file2->getElementsByTagName("trans-unit"); 
+          
         
-        for($i=0; $i < $altTransUnits->length; $i++) {
+        for($i=0; $i < $transUnits->length; $i++) {
             
             $transUnit = $transUnits->item($i);
-            $altTransUnit = $altTransUnits->item($i);
-                
-            if($altTransUnit->hasChildNodes()) {
-
-                $altTrans = $file->createElement("alt-trans");
-                $altTransSource = $file->createElement("source");
-                $altTransTarget = $file->createElement("target");
-
-                $children = $altTransUnit->childNodes;
-
-                foreach($children as $child) {
-                    if($child->nodeName == "source") {
-                        //$sourceAltTransValue = $child->nodeValue;
-                        $altTransSource->appendChild($file->createTextNode($child->nodeValue));
-                        //$x = $child->getAttribute("xml:lang");
-                        if($child->hasAttributeNS("xml","lang")) {
-                            //$attributeValue = $child->getAttributeNS("xml","lang");
-                            $altTransSource->setAttributeNS("xml","lang", $child->getAttributeNS("xml","lang"));
-                        }                            
-
-                    }elseif($child->nodeName == "target") {
-                        //$targetAltTransValue = $child->nodeValue;
-                        $altTransTarget->appendChild($file->createTextNode($child->nodeValue));
-
-                        if($child->hasAttributeNS("xml","lang")) {
-                            //$attributeValue = $child->getAttributeNS("xml","lang");
-                            $altTransTarget->setAttributeNS("xml","lang", $child->getAttributeNS("xml","lang"));
-                        }                            
-                    }
-                }
-
-                $altTrans->appendChild($altTransSource);
-                $altTrans->appendChild($altTransTarget);
-                $transUnit->appendChild($altTrans);
-
-                echo "has child nodes <br>";
+            $transUnit2 = $transUnits2->item($i);
+            $altTransUnits = $transUnit2->getElementsByTagName("alt-trans");
+            foreach($altTransUnits as $alt){
+            $copyAltTrans =$file->importNode($alt,true);
+            $transUnit->appendChild($copyAltTrans);
             }
         }
-        
-        if($data = $file->saveXML()) {
-            return $data;
-        } else {
-            echo "Failed to dump XML tree to string";
-        }            
+        $fileText=$file->saveXML();
     }
 }
 
-$file = "uploads/test1.xlf";
-$file2 = "uploads/test2.xlf";
-$doc = new DOMDocument();
-$doc2 = new DOMDocument();
-if($doc->load($file)) {
-    if($doc2->load($file2)) {
-        echo "<br>xml tree dump: ".ProviderHelper::mergeFile($doc, $doc2);        
-    }
-} 
+//$file = "uploads/test1.xlf";
+//$file2 = "uploads/test2.xlf";
+//$doc = file_get_contents($file);
+//$doc2 = file_get_contents($file2);
+//ProviderHelper::mergeFile($doc, $doc2);
+//$data = new DOMDocument();
+//$data->loadXML($doc);
+//$data->formatOutput = true;
+//echo $data->saveXML();
+
+

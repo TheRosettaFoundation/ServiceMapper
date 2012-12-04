@@ -1,12 +1,8 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 mb_internal_encoding('UTF-8');
+require_once 'IProvider.php';
 
-if(file_exists("IProvider.php")) {
-    require_once 'IProvider.php';
-} else {
-    require_once 'IProvider.php';
-}
 
 class SequenceFormat {
 }
@@ -323,13 +319,14 @@ class moses_en_es_europarlService extends SoapClient implements IProvider{
         
         if($doc->loadXML($fileText)) {
             if($transUnits = $doc->getElementsByTagName("trans-unit")) {
-                foreach($transUnits as $transUnit ){                        
+                foreach($transUnits as $transUnit ){  
+                    if($transUnit->hasAttribute("translate") && $transUnit->getAttribute("translate")=="no") continue;
                     $source = $transUnit->getElementsByTagName("source");
                     $text = $source->item(0)->nodeValue;
-                    
                     $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
                     $translation = strip_tags($translation);
                     $alt_trans = $doc->createElement("alt-trans");
+                    $alt_trans->setAttribute("origin", "Panacea");
                     $transUnit->appendChild($alt_trans);  
                     $clone=$source->item(0)->cloneNode(true);
                     $alt_trans->appendChild($clone);
