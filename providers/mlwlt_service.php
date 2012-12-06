@@ -79,10 +79,10 @@ class mlwlt_service extends SoapClient implements IProvider {
   
    public function translateFile($Filetext,$source=null,$target=null){
     $provider = new mlwlt_service();
-    $data = new mlwlt_xliff_mt_echo();
+    $data = new mlwlt_xliff_mt_prepare();
     $data->xliff_input = base64_encode($Filetext);
-    $result = $provider->mlwlt_xliff_mt_echo($data);
-    return base64_decode($result->mlwlt_xliff_mt_echoResult);
+    $result = $provider->mlwlt_xliff_mt_prepare($data);
+    return base64_decode($result->mlwlt_xliff_mt_prepareResult);
   }
 
     public function getSourceLanguages() {
