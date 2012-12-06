@@ -76,9 +76,9 @@ function view($out){
 			
 			if ($altTrans->length>0){
 				$k=0;
-				foreach ($altTrans as $alt){
+				foreach ($altTrans as  $alt){
 					$k++;
-					$altval=$alt->nodeValue;
+					$altval=$alt->getElementsByTagName("source")->item(0)->nodeValue." => ".$alt->getElementsByTagName("target")->item(0)->nodeValue;
 					
 					if ($k==1){
 					print '<tr class="row"><td colspan="1" rowspan="'.(string)$altTrans->length.'">alternative translations</td>';
@@ -280,9 +280,9 @@ if(move_uploaded_file($tmpName,$upload_path . $filename)){
 						</div>
 						</div>
 						<div id="footer">
-						<div id="footer-valid"> <a href="http://validator.w3.org/check/referer">xhtml</a>
+<!--						<div id="footer-valid"> <a href="http://validator.w3.org/check/referer">xhtml</a>
 						/ <a href="http://www.ginger-ninja.net/">ginger ninja!</a>
-						</div>
+						</div>-->
 						</div>
 						</div>
 						</body></html>

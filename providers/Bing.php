@@ -15,13 +15,13 @@ class Bing extends SoapClient implements IProvider {
     public function getSourceLanguages() {
         return array("ar","fi","it","ru","bg","fr","jp","sk","ca","de","ko","sl",
             "zh-CN","zh-TW","ht","lt","sv","cs","he","nn","th","da","hi","fa","tr"
-            ,"nl","hmn","pl","uk","en","hu","pt","vi","et","id","ro");
+            ,"nl","hmn","pl","uk","en","hu","pt","vi","et","id","ro","es");
     }
 
     public function getTargetLanguages() {
           return array("ar","fi","it","ru","bg","fr","jp","sk","ca","de","ko","sl",
             "zh-CN","zh-TW","ht","lt","sv","cs","he","nn","th","da","hi","fa","tr"
-            ,"nl","hmn","pl","uk","en","hu","pt","vi","et","id","ro");
+            ,"nl","hmn","pl","uk","en","hu","pt","vi","et","id","ro","es");
     }
     
     public function translateFile($fileText, $sourceLanguage, $targetLanguage) {
@@ -30,12 +30,15 @@ class Bing extends SoapClient implements IProvider {
          if($doc->loadXML($fileText)) {
              if($transUnits = $doc->getElementsByTagName("trans-unit")) {
                  foreach($transUnits as $transUnit ){                        
+                     if($transUnit->hasAttribute("translate") && $transUnit->getAttribute("translate")=="no") continue;
                      $source = $transUnit->getElementsByTagName("source");
                      $text = $source->item(0)->nodeValue;
+                     
 
                      $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
                      $translation = strip_tags($translation);
                      $alt_trans = $doc->createElement("alt-trans");
+                     $alt_trans->setAttribute("origin", "Bing translate");
                      $transUnit->appendChild($alt_trans);  
                      $clone=$source->item(0)->cloneNode(true);
                      $alt_trans->appendChild($clone);
