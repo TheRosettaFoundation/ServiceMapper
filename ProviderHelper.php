@@ -22,7 +22,7 @@ class ProviderHelper {
         $temp= scandir(ProviderHelper::getSetting("providers"));
         $ret=array();
         foreach ($temp as $provider) {
-            if($provider!="."&&$provider!="..") $ret[]=substr($provider, 0, sizeof($provider)-5);
+            if($provider!="."&&$provider!=".." && strncmp($provider, ".", 1)) $ret[]=substr($provider, 0, sizeof($provider)-5);
         }
         return $ret;
     }
