@@ -29,7 +29,7 @@ $doc = new DOMDocument();
 $doc->loadXML($jobs );	
 $xpath = new DOMXPath($doc);
 $files = $doc->getElementsByTagName("error");
-$files1 = $doc->getElementsByTagName("jobs");
+//$files1 = $doc->getElementsByTagName("jobs");
 	 
 foreach ($files as $file) {
 	$content =$file->getElementsByTagName( "msg" );
@@ -58,7 +58,7 @@ if (isset($jobId)) {
 	$files = $doc->getElementsByTagName( "job" );
 	//do{
   	foreach ($files as $file ) {
-        require_once 'HTTP'.DIRECTORY_SEPARATOR.'Request2.php'; // uses Pear
+//        require_once 'HTTP'.DIRECTORY_SEPARATOR.'Request2.php'; // uses Pear
 		$request = new HTTP_Request2($locConnect.'get_job.php', HTTP_Request2::METHOD_GET);
 		$request->setHeader('Accept-Charset', 'utf-8');
 		$url = $request->getUrl();

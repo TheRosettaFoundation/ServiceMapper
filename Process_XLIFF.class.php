@@ -119,7 +119,11 @@ class XLIFF {
         }
         $translatedFiles = array();
         foreach ($provider as $p){
+            try{
             $translatedFiles[]=$p->translateFile($xliff, $source, $target);
+            }catch(Exception $e){
+//            print_r($e);
+            }
             
         }
         $result= $doc->saveXML();

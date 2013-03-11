@@ -1,2 +1,4 @@
 config.ini
 /nbproject/
+/PEAR/.channels/
+/PEAR/.registry/

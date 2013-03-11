@@ -1,6 +1,7 @@
-<?php
+<?php namespace moses_en_es_europarlService;
 header('Content-Type: text/html; charset=utf-8');
 mb_internal_encoding('UTF-8');
+//require_once '../IProvider.php';
 require_once 'IProvider.php';
 
 
@@ -120,36 +121,36 @@ class getResultsInfoRequest {
  * @copyright {copyright}
  * @package   {package}
  */
-class moses_en_es_europarlService extends SoapClient implements IProvider{
+class moses_en_es_europarlService extends \SoapClient implements \IProvider{
 
   private static $classmap = array(
-                                    'SequenceFormat' => 'SequenceFormat',
-                                    'sequenceInput' => 'sequenceInput',
-                                    'appInputs' => 'appInputs',
-                                    'language' => 'language',
-                                    'appResults' => 'appResults',
-                                    'RunAndWaitFor' => 'RunAndWaitFor',
-                                    'RunAndWaitForResponse' => 'RunAndWaitForResponse',
-                                    'runResponse' => 'runResponse',
-                                    'jobId' => 'jobId',
-                                    'describeResponse' => 'describeResponse',
-                                    'getLastEventResponse' => 'getLastEventResponse',
-                                    'getResultsInfoResponse' => 'getResultsInfoResponse',
-                                    'resultInfo' => 'resultInfo',
-                                    'jobStatus' => 'jobStatus',
-                                    'jobStatus' => 'jobStatus',
-                                    'getStatusRequest' => 'getStatusRequest',
-                                    'getResultsRequest' => 'getResultsRequest',
-                                    'getSomeResultsRequest' => 'getSomeResultsRequest',
-                                    'waitforRequest' => 'waitforRequest',
-                                    'terminateRequest' => 'terminateRequest',
-                                    'clearRequest' => 'clearRequest',
-                                    'describeRequest' => 'describeRequest',
-                                    'getLastEventRequest' => 'getLastEventRequest',
-                                    'getResultsInfoRequest' => 'getResultsInfoRequest',
+                                    'SequenceFormat' => 'moses_en_es_europarlService\SequenceFormat',
+                                    'sequenceInput' => 'moses_en_es_europarlService\sequenceInput',
+                                    'appInputs' => 'moses_en_es_europarlService\appInputs',
+                                    'language' => 'moses_en_es_europarlService\language',
+                                    'appResults' => 'moses_en_es_europarlService\appResults',
+                                    'RunAndWaitFor' => 'moses_en_es_europarlService\RunAndWaitFor',
+                                    'RunAndWaitForResponse' => 'moses_en_es_europarlService\RunAndWaitForResponse',
+                                    'runResponse' => 'moses_en_es_europarlService\runResponse',
+                                    'jobId' => 'moses_en_es_europarlService\jobId',
+                                    'describeResponse' => 'moses_en_es_europarlService\describeResponse',
+                                    'getLastEventResponse' => 'moses_en_es_europarlService\getLastEventResponse',
+                                    'getResultsInfoResponse' => 'moses_en_es_europarlService\getResultsInfoResponse',
+                                    'resultInfo' => 'moses_en_es_europarlService\resultInfo',
+                                    'jobStatus' => 'moses_en_es_europarlService\jobStatus',
+                                    'jobStatus' => 'moses_en_es_europarlService\jobStatus',
+                                    'getStatusRequest' => 'moses_en_es_europarlService\getStatusRequest',
+                                    'getResultsRequest' => 'moses_en_es_europarlService\getResultsRequest',
+                                    'getSomeResultsRequest' => 'moses_en_es_europarlService\getSomeResultsRequest',
+                                    'waitforRequest' => 'moses_en_es_europarlService\waitforRequest',
+                                    'terminateRequest' => 'moses_en_es_europarlService\terminateRequest',
+                                    'clearRequest' => 'moses_en_es_europarlService\clearRequest',
+                                    'describeRequest' => 'moses_en_es_europarlService\describeRequest',
+                                    'getLastEventRequest' => 'moses_en_es_europarlService\getLastEventRequest',
+                                    'getResultsInfoRequest' => 'moses_en_es_europarlService\getResultsInfoRequest',
                                    );
 
-  public function moses_en_es_europarlService($wsdl = "http://www.cngl.ie/panacea-soaplab2-axis/typed/services/panacea.moses_en_es_europarl?wsdl", $options = array()) {
+  public function __construct($wsdl = "http://www.cngl.ie/panacea-soaplab2-axis/typed/services/panacea.moses_en_es_europarl?wsdl", $options = array()) {
     foreach(self::$classmap as $key => $value) {
       if(!isset($options['classmap'][$key])) {
         $options['classmap'][$key] = $value;
@@ -370,5 +371,5 @@ class moses_en_es_europarlService extends SoapClient implements IProvider{
 
 }
 //$test = new moses_en_es_europarlService();
-//echo $test->translateFile("/home/manuel/Desktop/ExampleDocs/lucia/Symposium3.xlf","en","es");
+//echo $test->translateFile(file_get_contents("/home/sean/Desktop/lucia/simple_short.xlf"),"en","es");
 ////echo $test->translate("en", "es",  "I am happy. Are you happy too?");

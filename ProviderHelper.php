@@ -41,28 +41,69 @@ class ProviderHelper {
         ProviderHelper::autoRequire($providerNames);
         $providers = array();
         foreach($providerNames as $name){
-            $providers[]=new $name();
+            $name = "$name\\$name";
+            $providers[]=new $name;
         }
         return $providers;
     }
     
     public static function enrichFile( &$file, array $array) {
         foreach ($array as $xliff){
+            if($xliff=="" || is_null($xliff)) continue;
             ProviderHelper::mergeFile($file, $xliff);
         }
 //        $file = $array[0];
     }
-    
+    public static function updateProvenance(&$fileText, &$fileText2){
+        
+        $file = new DOMDocument();
+        $file->loadXML($fileText);
+        $file2 = new DOMDocument();
+        $file2->loadXML($fileText2);
+        $head = $file->getElementsByTagName("header")->item(0);
+        $pRecs = $file->getElementsByTagName("provenanceRecords"); 
+        $pRecs2 = $file2->getElementsByTagName("provenanceRecords"); 
+        $map = array();
+        foreach($pRecs as $pRec){
+            $current =$pRec->getAttribute("xml:id");
+            $map[$current]=$pRec;
+        }
+        foreach($pRecs2 as $pRec){
+            $currentID =$pRec->getAttribute("xml:id");
+            if(isset($map[$currentID])){
+                $current = $file2->saveXML($pRec);
+                $old =$file->saveXML($map[$currentID]);                
+                if($current==$old) continue;
+                else{
+                    $i = 1;
+                    while(isset ($map["pr$i"])) $i++;
+                    $fileText2=str_replace("#$currentID","#pr$i", $fileText2);
+                    $pRec->setAttribute("xml:id","pr$i");
+                    $map["pr$i"]=$pRec;
+                    $head->appendChild($file->importNode($pRec,true));
+                    
+                }
+                
+            }else{
+                $head->appendChild($file->importNode($pRec,true));    
+            }
+        }
+        $fileText =$file->saveXML(); 
+        echo $fileText;
+    }
+
+
     public static function mergeFile(&$fileText, &$fileText2) { //private
         //merge altrans from file2  into file per transunit
-        
+        self::updateProvenance($fileText, $fileText2);
         $file = new DOMDocument();
         $file->loadXML($fileText);
         $file2 = new DOMDocument();
         $file2->loadXML($fileText2);
         $transUnits = $file->getElementsByTagName("trans-unit"); 
         $transUnits2 = $file2->getElementsByTagName("trans-unit"); 
-          
+        
+        
         
         for($i=0; $i < $transUnits->length; $i++) {
             
@@ -83,6 +124,7 @@ class ProviderHelper {
 //$doc = file_get_contents($file);
 //$doc2 = file_get_contents($file2);
 //ProviderHelper::mergeFile($doc, $doc2);
+//echo $doc;
 //$data = new DOMDocument();
 //$data->loadXML($doc);
 //$data->formatOutput = true;

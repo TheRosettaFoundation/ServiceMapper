@@ -1,11 +1,11 @@
-<?php
+<?php namespace Bing;
 header('Content-Type: text/html; charset=utf-8');
 mb_internal_encoding('UTF-8');
 
 
 require_once 'IProvider.php';
 
-class Bing extends SoapClient implements IProvider {
+class Bing extends \SoapClient implements \IProvider {
     
     public function __construct() {
         
@@ -26,7 +26,7 @@ class Bing extends SoapClient implements IProvider {
     
     public function translateFile($fileText, $sourceLanguage, $targetLanguage) {
 
-         $doc = new DOMDocument();
+         $doc = new \DOMDocument();
          if($doc->loadXML($fileText)) {
              if($transUnits = $doc->getElementsByTagName("trans-unit")) {
                  foreach($transUnits as $transUnit ){                        
@@ -57,6 +57,7 @@ class Bing extends SoapClient implements IProvider {
          } else {
              echo "Failed to dump XML tree to string";
          }
+//        return $fileText;
    }  
    
 
