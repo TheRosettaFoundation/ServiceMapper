@@ -4,6 +4,7 @@ mb_internal_encoding('UTF-8');
 
 
 require_once 'IProvider.php';
+//require_once '../IProvider.php';
 
 class Bing extends \SoapClient implements \IProvider {
     
@@ -11,7 +12,9 @@ class Bing extends \SoapClient implements \IProvider {
         
     }
 
-    
+    public function isEnabled(){
+        return true;
+    }
     public function getSourceLanguages() {
         return array("ar","fi","it","ru","bg","fr","jp","sk","ca","de","ko","sl",
             "zh-CN","zh-TW","ht","lt","sv","cs","he","nn","th","da","hi","fa","tr"
@@ -29,16 +32,41 @@ class Bing extends \SoapClient implements \IProvider {
          $doc = new \DOMDocument();
          if($doc->loadXML($fileText)) {
              if($transUnits = $doc->getElementsByTagName("trans-unit")) {
+                 $pRecs = $doc->getElementsByTagName("provenanceRecords");
+                 $map = array();
+                 foreach($pRecs as $pRec){
+                     $current =$pRec->getAttribute("xml:id");
+                     $map[$current]=$pRec;
+                 }
+                 $i = 1;
+                    while(isset ($map["pr$i"])) $i++;
+//                 unset ($map);
+                 $pRecs=$doc->createElement("its:provenanceRecords");
+                 $pRecs->setAttribute("xml:id", "pr$i");
+                 $pRec=$doc->createElement("its:provenanceRecord");
+                 $pRec->setAttribute("its:tool", "bingtranslate");
+                 $pRec->setAttribute("its:orgRef", "http://www.microsoft.com");
+                 $pRec->setAttribute("its:provRef", "http://api.microsofttranslator.com/V2/Http.svc/Translate");
+                 $pRecs->appendChild($pRec);
+                 $head = $doc->getElementsByTagName("header")->item(0);
+                 $head->appendChild($pRecs);
                  foreach($transUnits as $transUnit ){                        
                      if($transUnit->hasAttribute("translate") && $transUnit->getAttribute("translate")=="no") continue;
                      $source = $transUnit->getElementsByTagName("source");
                      $text = $source->item(0)->nodeValue;
                      
+                    
+               
+            
 
                      $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
+//                     $translation = $text; // un commont for fake translation
                      $translation = strip_tags($translation);
                      $alt_trans = $doc->createElement("alt-trans");
-                     $alt_trans->setAttribute("origin", "Bing translate");
+                     $alt_trans->setAttribute("origin", "MT");
+                     $alt_trans->setAttribute("its:annotatorsRef", "mtconfidence|http://api.microsofttranslator.com/V2/Http.svc/Translate");
+                     $alt_trans->setAttribute("its:provenanceRecordsRef", "#pr$i");
+                     
                      $transUnit->appendChild($alt_trans);  
                      $clone=$source->item(0)->cloneNode(true);
                      $alt_trans->appendChild($clone);
@@ -67,7 +95,7 @@ class Bing extends \SoapClient implements \IProvider {
         $b_tlang=strtolower($target);
         $language_codes = parse_ini_file("demolangs.ini");
         $language_names = parse_ini_file("languages.ini");
-
+        
         if(!isset($language_codes[$b_slang])) {
             $b_slang = $language_names[strtoupper($b_slang)];
         }
@@ -75,7 +103,7 @@ class Bing extends \SoapClient implements \IProvider {
         if(!isset($language_codes[$b_tlang])) {
             $b_tlang = $language_names[strtoupper($b_tlang)];
         }
-        
+//        echo "$source ,$target,$b_slang,$b_tlang";
         //Proxy switch Naoto 2010-03-20
         $proxy = false; // test
         if ($proxy){
@@ -102,6 +130,7 @@ class Bing extends \SoapClient implements \IProvider {
 
         $cxContext = stream_context_create($aContext);	
         $query = urlencode($text).'&from='.$b_slang.'&to='.$b_tlang;
+//        echo 'http://api.microsofttranslator.com/V2/Http.svc/Translate?appId=B762C414CF08D83A6715EEB0171C4BF6E1AF0490&text='.$query;
         $sFile = file_get_contents('http://api.microsofttranslator.com/V2/Http.svc/Translate?appId=B762C414CF08D83A6715EEB0171C4BF6E1AF0490&text='.$query, FILE_TEXT, $cxContext);
 //        return mb_convert_encoding($sFile, 'unicode');
         
@@ -110,6 +139,6 @@ class Bing extends \SoapClient implements \IProvider {
 }
 //$bing= new Bing();
 //
-//echo $bing->translateFile(file_get_contents("/home/manuel/Desktop/ExampleDocs/lucia/Symposium3.xlf"), "en","es");
+//echo $bing->translateFile(file_get_contents("../uploads/EXc-xliff-prov-rt-1-post-seg.xlf"), "en","es");
 
 ?>

@@ -25,6 +25,12 @@ interface IProvider {
      * @return Array
      */
     public function getSourceLanguages();
+    
+    /**
+     * checks if a provider is enabled
+     * @return boolean
+     */
+    public function isEnabled();
 }
 
 ?>

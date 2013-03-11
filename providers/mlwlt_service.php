@@ -44,6 +44,9 @@ require_once 'IProvider.php';
  * @package   {package}
  */
 class mlwlt_service extends \SoapClient implements \IProvider {
+     public function isEnabled(){
+        return true;
+    }
 
     private static $classmap = array(
         'mlwlt_xliff_mt_echo' => 'mlwlt_service\mlwlt_xliff_mt_echo',

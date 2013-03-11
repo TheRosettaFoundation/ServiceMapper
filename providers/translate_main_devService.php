@@ -113,6 +113,9 @@ class getResultsInfoRequest {
  * @package   {package}
  */
 class translate_main_devService extends \SoapClient implements \IProvider {
+     public function isEnabled(){
+        return false;
+    }
 
   private static $classmap = array(
                                     'SequenceFormat' => 'translate_main_devService\SequenceFormat',

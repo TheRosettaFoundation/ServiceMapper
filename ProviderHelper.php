@@ -42,7 +42,8 @@ class ProviderHelper {
         $providers = array();
         foreach($providerNames as $name){
             $name = "$name\\$name";
-            $providers[]=new $name;
+            $provider=new $name;
+            if($provider->isEnabled())$providers[]=$provider;
         }
         return $providers;
     }
@@ -72,8 +73,9 @@ class ProviderHelper {
             $currentID =$pRec->getAttribute("xml:id");
             if(isset($map[$currentID])){
                 $current = $file2->saveXML($pRec);
-                $old =$file->saveXML($map[$currentID]);                
-                if($current==$old) continue;
+                $old =$file->saveXML($file->importNode($map[$currentID],true));                
+                if($pRec==$map[$currentID]&&$current==$old) continue;
+//                if($pRec==$map[$currentID])continue;
                 else{
                     $i = 1;
                     while(isset ($map["pr$i"])) $i++;
@@ -89,7 +91,7 @@ class ProviderHelper {
             }
         }
         $fileText =$file->saveXML(); 
-        echo $fileText;
+        
     }
 
 
