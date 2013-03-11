@@ -163,7 +163,7 @@ class XLIFF {
 }
 
 //$xliff = new XLIFF();
-$data = file_get_contents("uploads/EXc-xliff-prov-rt-1-post-seg.xlf");
-$xliff = new XLIFF();
-echo $xliff->processXLIFF($data);
+//$data = file_get_contents("uploads/EXc-xliff-prov-rt-1-post-seg.xlf");
+//$xliff = new XLIFF();
+//echo $xliff->processXLIFF($data);
 
