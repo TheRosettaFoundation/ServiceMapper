@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="2.0" srcLang="en-us" tgtLang="es-es" xmlns:xlf="urn:oasis:names:tc:xliff:document:2.0"
+        xmlns:its="http://www.w3.org/2005/11/its" xmlns:gls="urn:oasis:names:tc:xliff:glossary:2.0"
+        xmlns:mtc="urn:oasis:names:tc:xliff:matches:2.0">
+    <file id="sampleFile">
+        <gls:glossary>
+            <gls:glossentry id="ge1">
+                <gls:term>Arizona</gls:term>
+                <gls:translation>Arizona</gls:translation>
+            </gls:glossentry>
+            <gls:glossentry id="ge2">
+                <gls:term>Antarctica</gls:term>
+                <gls:translation>Antarctique</gls:translation>
+            </gls:glossentry>
+            <gls:glossentry id="ge3">
+                <gls:term>Africa</gls:term>
+                <gls:translation>Afrique</gls:translation>
+            </gls:glossentry>
+            <gls:glossentry id="ge4">
+                <gls:term>Bohemia</gls:term>
+                <gls:translation>Bohême</gls:translation>
+            </gls:glossentry>
+        </gls:glossary>
+        <unit id="unit_1" translate="yes">
+            <segment>
+                <source xml:lang="en-us">ITS, XLIFF and PROV Example</source>
+            </segment>
+            <segment>
+                <source xml:lang="en-us">
+                    Have you ever dreamed of stepping on each of the six continents around the planet during a 
+                    single, amazing trip? Our <g id="1">Around the 
+                    World in 80 Days</g> travel package is specifically designed for this.
+                </source>
+             </segment>
+            <segment>
+                <source xml:lang="en-us">
+                    From the canyons of <mrk its:tanConfidence="0.7"
+                    its:tanClassRef="http://nerd.eurecom.fr/ontology#Place"
+                    its:tanIdentRef="http://dbpedia.org/resource/Arizona"><mrk its:terminology="yes" 
+                    its:termInfoRef="#ge1">Arizona</mrk></mrk>, to the Khmer temples deep in the 
+                    jungle; from the tropical beaches of Queensland to the glaciers of <mrk 
+                    its:tanConfidence="0.7" its:tanClassRef="http://nerd.eurecom.fr/ontology#Place"
+                    its:tanIdentRef="http://dbpedia.org/resource/Antarctica"><mrk 
+                    its:terminology="yes" its:termInfoRef="#ge2">Antarctica</mrk></mrk>; or from 
+                    the wild savanna of <mrk its:tanConfidence="0.7"
+                    its:tanClassRef="http://nerd.eurecom.fr/ontology#Place"
+                    its:tanIdentRef="http://dbpedia.org/resource/Africa">
+                    <mrk its:terminology="yes" its:termInfoRef="#ge3">Africa</mrk></mrk>
+                    to mysterious castles in the forests of
+                    <mrk mtype="x-its" its:terminology="yes" its:termInfoRef="#ge4">Bohemia</mrk>,
+                    our offer takes you in some of the most amazing places on our planet.
+                    In 80 days, you will see more of the world than most
+                    see through their entire lifetime!
+                </source>
+            </segment>
+        </unit>
+    </file>
+</xliff>

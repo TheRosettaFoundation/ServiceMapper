@@ -1,6 +1,6 @@
 <?php namespace translate_main_devService;
 //require_once '../IProvider.php';
-require_once 'IProvider.php';
+require_once __DIR__.'/../IProvider.php';
 class sequenceInput {
   public $direct_data; // string
   public $usa; // string
@@ -323,19 +323,19 @@ class translate_main_devService extends \SoapClient implements \IProvider {
     $data->targetLanguage=$target;
     $result =$Filetext;
     try{
-    $jobid = self::run($data);
-    $waitFor =new waitforRequest();
-    $waitFor->jobId=$jobid;
-    self::waitfor($waitFor);
-    $resultRequest= new getResultsRequest();
-    $resultRequest->jobId=$jobid;
-    $result = self::getResults($resultRequest);
-    $infoRequest = new getResultsInfoRequest();
-    $infoRequest->jobId=$jobid;
-    $info = self::getResultsInfo($infoRequest);
-    }  catch (Exception $e){
-    print_r($e);
-}
+        $jobid = self::run($data);
+        $waitFor =new waitforRequest();
+        $waitFor->jobId=$jobid;
+        self::waitfor($waitFor);
+        $resultRequest= new getResultsRequest();
+        $resultRequest->jobId=$jobid;
+        $result = self::getResults($resultRequest);
+        $infoRequest = new getResultsInfoRequest();
+        $infoRequest->jobId=$jobid;
+        $info = self::getResultsInfo($infoRequest);
+        }  catch (Exception $e){
+        print_r($e);
+    }
     return $result->output;
   }
   
@@ -350,4 +350,4 @@ class translate_main_devService extends \SoapClient implements \IProvider {
 }
 
 //$temp = new translate_main_devService();
-//echo $temp->translateFile(file_get_contents("/home/sean/Desktop/Example1_HTML5.html.xlf"),"en","fr");
+//echo $temp->translateFile(file_get_contents("/home/manuel/dev/ITS-2.0-Testsuite/its2.0/xliffsamples/roundtrip-example/EXc-xliff-prov-rt-1-post-seg.xlf"),"en","fr");

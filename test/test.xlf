@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:itsx="http://www.ul.ie/its/x-its" xmlns:its="http://www.w3.org/2005/11/its" version="1.2">
+  <file datatype="plaintext" original="test.xlf" source-language="en-us" target-language="es-es">
+    <body>
+		<trans-unit id="TU0">
+			<source xml:lang="en-us">
+				<mrk mid="MRK0" mtype="seg">ITS, XLIFF and PROV Example</mrk>
+				<mrk mid="MRK1" mtype="seg">
+		                Have you ever dreamed of stepping on each of the six continents around the planet during a 
+		                single, amazing trip? Our Around the 
+		                World in 80 Days travel package is specifically designed for this.
+	            </mrk>
+				<mrk mid="MRK2" mtype="seg">
+		                From the canyons of Arizona, to the Khmer temples deep in the 
+		                jungle; from the tropical beaches of Queensland to the glaciers of Antarctica; or from 
+		                the wild savanna of 
+		                Africa
+		                to mysterious castles in the forests of
+		                Bohemia,
+		                our offer takes you in some of the most amazing places on our planet.
+		                In 80 days, you will see more of the world than most
+		                see through their entire lifetime!
+	            </mrk>
+			</source>
+			<seg-source xml:lang="en-us">
+				<mrk mid="SM0" mtype="seg">ITS, XLIFF and PROV Example</mrk>
+				<mrk mid="SM1" mtype="seg">
+		                Have you ever dreamed of stepping on each of the six continents around the planet during a 
+		                single, amazing trip? Our Around the 
+		                World in 80 Days travel package is specifically designed for this.
+		        </mrk>
+				<mrk mid="SM2" mtype="seg">
+		                From the canyons of Arizona, to the Khmer temples deep in the 
+		                jungle; from the tropical beaches of Queensland to the glaciers of Antarctica; or from 
+		                the wild savanna of 
+		                Africa
+		                to mysterious castles in the forests of
+		                Bohemia,
+		                our offer takes you in some of the most amazing places on our planet.
+		                In 80 days, you will see more of the world than most
+		                see through their entire lifetime!
+		        </mrk>
+			</seg-source>
+	</trans-unit>
+	</body>
+  </file>
+</xliff>
+

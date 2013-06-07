@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=utf-8');
 mb_internal_encoding('UTF-8');
 //require_once '../IProvider.php';
-require_once 'IProvider.php';
+require_once __DIR__.'/../IProvider.php';
 
 
 class SequenceFormat {
@@ -124,7 +124,7 @@ class getResultsInfoRequest {
 class moses_en_es_europarlService extends \SoapClient implements \IProvider{
 
      public function isEnabled(){
-        return false;
+        return true;
     }
     
     
@@ -319,40 +319,245 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
       );
   }
   
-   public function translateFile($fileText, $sourceLanguage, $targetLanguage) {
-
-        $doc = new DOMDocument();
-        
+    public function translateFile($fileText, $sourceLanguage, $targetLanguage) {
+        $doc = new \DOMDocument();
         if($doc->loadXML($fileText)) {
-            if($transUnits = $doc->getElementsByTagName("trans-unit")) {
-                foreach($transUnits as $transUnit ){  
-                    if($transUnit->hasAttribute("translate") && $transUnit->getAttribute("translate")=="no") continue;
-                    $source = $transUnit->getElementsByTagName("source");
-                    $text = $source->item(0)->nodeValue;
-                    $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
-                    $translation = strip_tags($translation);
-                    $alt_trans = $doc->createElement("alt-trans");
-                    $alt_trans->setAttribute("origin", "Panacea");
-                    $transUnit->appendChild($alt_trans);  
-                    $clone=$source->item(0)->cloneNode(true);
-                    $alt_trans->appendChild($clone);
-                    $altTarget = $doc->createElement("target");
-                    $altTarget->setAttribute("xml:lang", $targetLanguage);
-                    $altTarget->appendChild($doc->createTextNode($translation));
-                    $alt_trans->appendChild($altTarget);                    
-                }  
-            }                     
-        } else {
-            echo "Failed to load file. Check path/permissions.";
+            if($version = $doc->firstChild->getAttribute("version")) {
+                if(strpos($version, "1.") === 0) {
+                    return $this->translateXLIFFFile1x($doc, $fileText,$sourceLanguage, $targetLanguage);
+                } else if(strcasecmp($version,"2.0") == 0) {
+                    return $this->translateXLIFFFile2($doc, $fileText,$sourceLanguage, $targetLanguage);
+                }
+            }
         }
-        $doc->formatOutput = true;
-        if($data = $doc->saveXML()) {
-             return $data;
-        } else {
-            echo "Failed to dump XML tree to string";
+        return $fileText;
+   }  
+   
+    private function translateXLIFFFile1x(&$doc, $Filetext,$sourceLanguage=null,$targetLanguage=null)
+    {
+
+             if($transUnits = $doc->getElementsByTagName("trans-unit")) {
+                 $pRecs = $doc->getElementsByTagName("provenanceRecords");
+                 $map = array();
+                 foreach($pRecs as $pRec){
+                     $current =$pRec->getAttribute("xml:id");
+                     $map[$current]=$pRec;
+                 }
+                 $i = 1;
+                    while(isset ($map["pr$i"])) $i++;
+//                 unset ($map);
+                 $pRecs=$doc->createElement("its:provenanceRecords");
+                 $pRecs->setAttribute("xml:id", "pr$i");
+                 $pRec=$doc->createElement("its:provenanceRecord");
+                 $pRec->setAttribute("its:tool", "Panacea");
+                 $pRec->setAttribute("its:orgRef", "http://www.cngl.ie/");
+                 $pRec->setAttribute("its:provRef", "http://www.cngl.ie/panacea-soaplab2-axis/typed/services/panacea.moses_en_es_europarl"); 
+                 $pRecs->appendChild($pRec);
+                 $head = $doc->getElementsByTagName("header")->item(0);
+                 $head->appendChild($pRecs);
+                 foreach($transUnits as $transUnit ){                        
+                     if($transUnit->hasAttribute("translate") && $transUnit->getAttribute("translate")=="no") continue;
+                     $segsource = $transUnit->getElementsByTagName("seg-source");
+                     $source = $transUnit->getElementsByTagName("source");
+                     $segs = array();
+                     if($segsource->length==0||!($current=simplexml_import_dom ($segsource->item(0)))) {
+                        $current = simplexml_import_dom ($source->item(0));
+                     }
+   
+                     $mrks = $current->xpath("*[@mtype='seg']");
+
+                     if(is_array($mrks)&&!empty($mrks)){
+
+                     $segs=$mrks;
+                    }
+                    else $segs[]= $current;
+
+                    foreach ($segs as $seg){
+                        $text = $seg->asXML();
+                        if(strcasecmp($seg->getName(),"mrk")==0){ 
+                            
+                            $pos = strpos($text, "<mrk");
+                            if($pos ===0){
+                                $pos = strpos($text, ">")+1;
+                                if(strpos($text, "mtype='seg'")<$pos ){
+                                    $text=  substr($text, $pos);
+                                    $pos = strrpos($text, "</mrk>");
+                                    $text= substr_replace($text,"",$pos);
+                                }
+                            }
+                        
+                        } else {
+                            
+                            $pos = strpos($text, "<".$seg->getName());
+                            if($pos ===0){
+                                $pos = strpos($text, ">")+1;
+                                $text=  substr($text, $pos);
+                                $pos = strrpos($text, "</".$seg->getName().">");
+                                $text= substr_replace($text,"",$pos);
+                            }
+                        }
+
+     
+//                        $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
+                        $translation = $text; // un commont for fake translation
+                        
+                        $alt_trans = $doc->createElement("alt-trans");
+                        $alt_trans->setAttribute("origin", "Panacea");
+                        //$alt_trans->setAttribute("its:annotatorsRef", "mtconfidence|http://api.microsofttranslator.com/V2/Http.svc/Translate");
+                        $alt_trans->setAttribute("its:provenanceRecordsRef", "#pr$i");                       
+                        if(isset($seg['mid']) )  $alt_trans->setAttribute("mid", $seg['mid']);
+                          
+                        $altSource= $doc->createElement("source");
+                        $altSource->setAttribute("xml:lang", $sourceLanguage);
+                        $altSource->appendChild(new \DOMText($text));
+                        $alt_trans->appendChild($altSource);
+                        $altTarget = $doc->createElement("target");
+                        $altTarget->setAttribute("xml:lang", $targetLanguage);
+                        $altTarget->appendChild($doc->createTextNode($translation));
+                        $alt_trans->appendChild($altTarget);
+                        $transUnit->appendChild($alt_trans);
+//                        $finalTarget = $doc->createElement("target");
+//                        $finalTarget->setAttribute("xml:lang", $targetLanguage);
+                        $currentid = $transUnit->getAttribute("id");
+
+                        $temp = new \DOMDocument();
+                        $saved = htmlspecialchars_decode($doc->saveXML());
+                        
+                        $temp->loadXML($saved);
+                         $domXPath = new \DOMXPath($temp);
+                        $sourceMrks = $domXPath->query("//*[local-name()='trans-unit' and @id='$currentid']/*[local-name()='alt-trans' and @mid={$seg['mid']}]/*[local-name()='source']/*[local-name()='mrk' and (@mtype='term' or @mtype='protected' or @mtype='phrase')]");
+                        $targetMrks = $domXPath->query("//*[local-name()='trans-unit' and @id='$currentid']/*[local-name()='alt-trans'and @mid={$seg['mid']}]/*[local-name()='target']/*[local-name()='mrk' and (@mtype='term' or @mtype='protected' or @mtype='phrase')]");
+                        for($i=0; $i < $sourceMrks->length; $i++) {
+//                       
+                          $translation= str_replace($temp->saveXML($targetMrks->item($i)), $temp->saveXML($sourceMrks->item($i)),$translation);
+                         
+                        }
+                        $sourceMrks = $domXPath->query("//*[local-name()='trans-unit' and @id='$currentid']/*[local-name()='alt-trans' and @mid={$seg['mid']}]/*[local-name()='source']/*[local-name()='mrk' and not(@mtype='term' or @mtype='protected' or @mtype='phrase')]");
+                        $targetMrks = $domXPath->query("//*[local-name()='trans-unit' and @id='$currentid']/*[local-name()='alt-trans'and @mid={$seg['mid']}]/*[local-name()='target']/*[local-name()='mrk' and not(@mtype='term' or @mtype='protected' or @mtype='phrase')]");
+                        for($i=0; $i < $sourceMrks->length; $i++) {
+//                       
+                          $translation= str_replace($temp->saveXML($sourceMrks->item($i)), $temp->saveXML($targetMrks->item($i)),$translation);
+                         
+                        }
+                        
+                        $finalTarget = $doc->createElement("target");
+                        $finalTarget->setAttribute("xml:lang", $targetLanguage);
+                        $finalTarget->appendChild($doc->createTextNode($translation));
+                        $alt_trans->appendChild($doc->importNode($finalTarget));
+                        $alt_trans->removeChild($altTarget);
+                     }
+                 }  
+             }                     
+
+         $doc->formatOutput = true;
+         if($data = htmlspecialchars_decode($doc->saveXML())) {
+              return $data;
+         } else {
+             echo "Failed to dump XML tree to string";
+         }
+        
+    }
+            
+    private function translateXLIFFFile2(&$doc, $Filetext,$source=null,$target=null)
+    {
+        
+        if($units = $doc->getElementsByTagName("unit")) {
+
+            foreach($units as $unit) {
+                $count=0;
+                $translateUnit = ($unit->hasAttribute("translate") && $unit->getAttribute("translate")=="yes") || !$unit->hasAttribute("translate");
+//                if($segment->hasAttribute("translate") && $segment->getAttribute("translate")=="no") continue;
+
+                $pRecs = $doc->getElementsByTagName("provenanceRecords");
+                $map = array();
+                foreach($pRecs as $pRec){
+                    $current =$pRec->getAttribute("xml:id");
+                    $map[$current]=$pRec;
+                }
+                $i = 1;
+                   while(isset ($map["pr$i"])) $i++;
+            //                 unset ($map);
+                 $pRecs=$doc->createElement("its:provenanceRecords");
+                 $pRecs->setAttribute("xml:id", "pr$i");
+                 $pRec=$doc->createElement("its:provenanceRecord");
+                 $pRec->setAttribute("its:tool", "Panacea");
+                 $pRec->setAttribute("its:orgRef", "http://www.cngl.ie/");
+                 $pRec->setAttribute("its:provRef", "http://www.cngl.ie/panacea-soaplab2-axis/typed/services/panacea.moses_en_es_europarl"); 
+                 $pRecs->appendChild($pRec);
+                $fileElement = $doc->getElementsByTagName("file")->item(0);
+                $fileElement->appendChild($pRecs);
+
+                if($segments = $doc->getElementsByTagName("segment")) {
+                    foreach($segments as $segment ){  
+                        $sourceElement = simplexml_import_dom($segment->getElementsByTagName("source")->item(0));
+                        $segmentText = $sourceElement->asXML();
+                         $pos = strpos($segmentText, "<".$sourceElement->getName());
+                            if($pos ===0){
+                                $pos = strpos($segmentText, ">")+1;
+                                $segmentText=  substr($segmentText, $pos);
+                                $pos = strrpos($segmentText, "</".$sourceElement->getName().">");
+                                $segmentText= substr_replace($segmentText,"",$pos);
+                            }
+                        $translateSegment = ($segment->hasAttribute("translate") && $segment->getAttribute("translate")=="yes") || (!$segment->hasAttribute("translate")||$translateUnit);
+                        if($translateSegment) {
+                            
+                            $matches = $doc->createElement("matches");
+                            $match = $doc->createElement("match");
+                            $matchSource= $doc->createElement("source");
+                            $matchSource->setAttribute("xml:lang", $source);
+                            $matchSource->appendChild(new \DOMText($segmentText));
+                            $match->appendChild($matchSource);
+                            
+                            $translation = $this->translate($source, $target, $segmentText);
+//                            $translation = $segmentText; //fake translation
+                            $matchTarget= $doc->createElement("target");
+                            $matchTarget->setAttribute("xml:lang", $target);
+                            $matchTarget->appendChild(new \DOMText($translation));
+                            $match->appendChild($matchTarget);
+                            
+                            $matches->appendChild($match);
+                            $segment->appendChild($matches);                            
+                            
+                            $temp = new \DOMDocument();
+                            $saved = htmlspecialchars_decode($doc->saveXML());
+
+                            $currentid = $unit->getAttribute("id");
+                            $temp->loadXML($saved);
+                            $domXPath = new \DOMXPath($temp);
+                            $sourceMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='source']//*[local-name()='mrk' and (@its:terminology='yes' or @translate='no')]");
+                            $targetMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='target']//*[local-name()='mrk' and (@its:terminology='yes' or @translate='no')]");
+                            for($i=0; $i < $sourceMrks->length; $i++) {
+    //                       
+                              $translation= str_replace($temp->saveXML($targetMrks->item($i)), $temp->saveXML($sourceMrks->item($i)),$translation);
+
+                            }
+                            $sourceMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='source']//*[local-name()='mrk' and not(@its:terminology='yes' or @translate='no')]");
+                            $targetMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='target']//*[local-name()='mrk' and not(@its:terminology='yes' or @translate='no')]");
+                            for($i=0; $i < $sourceMrks->length; $i++) {
+    //                       
+                              $translation= str_replace($temp->saveXML($sourceMrks->item($i)), $temp->saveXML($targetMrks->item($i)),$translation);
+
+                            }
+                            $count++;
+                            $finalTarget= $doc->createElement("target");
+                            $finalTarget->setAttribute("xml:lang", $target);
+                            $finalTarget->appendChild(new \DOMText($translation));
+                            $match->appendChild($finalTarget);
+                            $match->removeChild($matchTarget);
+                        }
+                    }
+                }
+            }
+            $doc->formatOutput = true;
+            if($data = htmlspecialchars_decode($doc->saveXML())) {
+                 return $data;
+            } else {
+                echo "Failed to dump XML tree to string";
+            }
         }
-  }
-  
+        
+        return $Filetext;
+    }
   
   public function translate($source,$target,$text){
     $parameters = new appInputs();
@@ -361,7 +566,7 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
     $parameters->nodetokenize = false;
     $parameters->nolowercase = false;
     $parameters->norecase = true;
-    $parameters->notokenize=false;
+    $parameters->notokenize=true;
     $result = $this->runAndWaitFor($parameters);
     
     return $result->output;
@@ -376,5 +581,5 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
 
 }
 //$test = new moses_en_es_europarlService();
-//echo $test->translateFile(file_get_contents("/home/sean/Desktop/lucia/simple_short.xlf"),"en","es");
-////echo $test->translate("en", "es",  "I am happy. Are you happy too?");
+//echo $test->translateFile(file_get_contents("/home/manuel/dev/ITS-2.0-Testsuite/its2.0/xliffsamples/roundtrip-example/EXe-xliff-prov-rt-1-post-term.xlf"),"en","es");
+//echo $test->translate("en", "es",  "I am happy. Are you happy too?");

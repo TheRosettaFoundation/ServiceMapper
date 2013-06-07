@@ -30,7 +30,7 @@ interface IProvider {
      * checks if a provider is enabled
      * @return boolean
      */
-    public function isEnabled();
+    public function isEnabled();   
 }
 
 ?>
