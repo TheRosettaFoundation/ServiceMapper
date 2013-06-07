@@ -29,6 +29,8 @@ On 2011/Nov only MTBroker_Connect has been developed connecting Babelfish MT pro
     cp config.template.ini config.ini
 * Enter your settings in config.ini
 
+Note: Some MT providers take a long time to return, in order to avoid socket exceptions, please set [default_socket_timeout] to a high value such as 4 minutes [default_socket_timeout = 240] or more in the php.ini
+
 ## How it works
 * Call index.html
   * Standalone component
