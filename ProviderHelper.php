@@ -125,14 +125,24 @@ class ProviderHelper {
                     $i = 1;
                     while(isset ($map["pr$i"])) $i++;
                     $fileText2=str_replace("#$currentID","#pr$i", $fileText2);
+//                    $fileText2=str_replace("xml:id=\"$currentID\"","xml:id=\"pr$i\"", $fileText2);
+//                    $fileText2=str_replace("xml:id='$currentID'","xml:id='pr$i'", $fileText2);
                     $pRec->setAttribute("xml:id","pr$i");
                     $map["pr$i"]=$pRec;
-                    $fileElement->appendChild($file->importNode($pRec,true));
+                    $placeholder = $file->getElementsByTagName("group")->item(0);
+                    if(is_null($placeholder)) {
+                        $placeholder = $file->getElementsByTagName("unit")->item(0);
+                    }
+                    $fileElement->insertBefore($file->importNode($pRec,true), $placeholder);
                     
                 }
                 
             }else{
-                $fileElement->appendChild($file->importNode($pRec,true));    
+                 $placeholder = $file->getElementsByTagName("group")->item(0);
+                    if(is_null($placeholder)) {
+                        $placeholder = $file->getElementsByTagName("unit")->item(0);
+                    }
+                    $fileElement->insertBefore($file->importNode($pRec,true), $placeholder);
             }
         }
         $fileText =$file->saveXML(); 
@@ -168,28 +178,44 @@ class ProviderHelper {
         self::updateProvenanceXLIFF2($fileText, $fileText2);
         $file = new DOMDocument();
         $file->loadXML($fileText);
+        $xPath = new \DOMXPath($file);
         $file2 = new DOMDocument();
         $file2->loadXML($fileText2);
+        $xPath2 = new \DOMXPath($file2);
         $segments = $file->getElementsByTagName("segment"); 
-        $matches2 = $file2->getElementsByTagName("matches"); 
-        
-               
-        for($i=0; $i < $matches2->length; $i++) {
-            
-            $segment = $segments->item($i);
-            $match2 = $matches2->item($i);
-            
-            $matches = $segment->getElementsByTagName("matches")->item(0);
-            if(is_null($matches)){
-                $matches = $file->createElement("matches");
-                $segment->appendChild($matches);
-            }
-            
-            $matchElements = $match2->getElementsByTagName("match");
-            foreach($matchElements as $matchElement){
-                $copyMatchElement =$file->importNode($matchElement,true);
-                $matches->appendChild($copyMatchElement);
-            }
+       $segments2 = $file2->getElementsByTagName("segment"); 
+//        if($matches2 = $xPath2->query("//*[local-name()='matches']")){
+            for($i=0; $i < $segments2->length; $i++) {
+
+                $segment = $segments->item($i);
+                $segment2 = $segments2->item($i);
+
+//                $matches = $xPath->query("//*[local-name()='matches']");
+//                $matchPrefix = $file->lookupPrefix("urn:oasis:names:tc:xliff:matches:2.0");
+                $matches = $segment->getElementsByTagName("matches")->item(0);
+//                if($matches===false||$matches->length===0){
+////                    if(is_null($matchPrefix) || $matchPrefix="") {
+////                        $doc->firstChild->setAttributeNS('http://www.w3.org/2000/xmlns/',"xmlns:mtc","urn:oasis:names:tc:xliff:matches:2.0");
+////                        $matchPrefix = "mtc";
+////                    }
+////                    $matches = $file->createElement("{$matchPrefix}:matches");
+//                    $matches = $file->createElement("matches");
+//                    $segment->appendChild($matches);
+//                } else $matches= $matches->item(0);
+                if(is_null($matches)){
+                    $matches = $file->createElement("matches");
+                    $segment->appendChild($matches);
+                }
+
+                $matchElements = $segment2->getElementsByTagName("match");
+//                $matchElements = $xPath2->query("//*[local-name()='match']",$match2);
+//                if($matchElements && $matchElements->length>0){
+                    foreach($matchElements as $matchElement){
+                        $copyMatchElement =$file->importNode($matchElement,true);
+                        $matches->appendChild($copyMatchElement);
+                    }
+//                }
+//            }
         }
         $fileText=$file->saveXML();
     }

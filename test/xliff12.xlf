@@ -1,45 +1,66 @@
-<?xml version="1.0" encoding="UTF-8"?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:itsx="http://www.ul.ie/its/x-its" version="1.2" xmlns:its="http://www.w3.org/2005/11/its"><file datatype="plaintext" original="test.xlf" source-language="en-us" target-language="es-es"><header><its:provenanceRecords xml:id="1"><its:provenanceRecord its:tool="mosesmt" its:orgRef="http://www.moravia.com" its:provRef="http://mlwlt.moravia.com/mlwlt-web-test/LogDetailXml.aspx?log=2013-06-06%2018.39.56.719" /></its:provenanceRecords></header><body><trans-unit id="TU0"><source xml:lang="en-us"><mrk mid="MRK0" mtype="seg">ITS, XLIFF and PROV Example</mrk><mrk mid="MRK1" mtype="seg">
-                    Have you ever dreamed of stepping on each of the six continents around the planet during a 
-                    single, amazing trip? Our Around the 
-                    World in 80 Days travel package is specifically designed for this.
-                </mrk><mrk mid="MRK2" mtype="seg">
-                    From the canyons of Arizona, to the Khmer temples deep in the 
-                    jungle; from the tropical beaches of Queensland to the glaciers of Antarctica; or from 
-                    the wild savanna of 
-                    Africa
-                    to mysterious castles in the forests of
-                    Bohemia,
-                    our offer takes you in some of the most amazing places on our planet.
-                    In 80 days, you will see more of the world than most
-                    see through their entire lifetime!
-                </mrk></source><seg-source xml:lang="en-us"><mrk mid="SM0" mtype="seg">ITS, XLIFF and PROV Example</mrk><mrk mid="SM1" mtype="seg">
-                    Have you ever dreamed of stepping on each of the six continents around the planet during a 
-                    single, amazing trip? Our Around the 
-                    World in 80 Days travel package is specifically designed for this.
-                </mrk><mrk mid="SM2" mtype="seg">
-                    From the canyons of Arizona, to the Khmer temples deep in the 
-                    jungle; from the tropical beaches of Queensland to the glaciers of Antarctica; or from 
-                    the wild savanna of 
-                    Africa
-                    to mysterious castles in the forests of
-                    Bohemia,
-                    our offer takes you in some of the most amazing places on our planet.
-                    In 80 days, you will see more of the world than most
-                    see through their entire lifetime!
-                </mrk></seg-source>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:itsx="http://www.ul.ie/its/x-its" version="1.2" xmlns:its="http://www.w3.org/2005/11/its">
+    <file datatype="plaintext" original="test.xlf" source-language="en-us" target-language="es-es">
+        <header>
+            <its:provenanceRecords xml:id="1">
+                <its:provenanceRecord its:tool="mosesmt" its:orgRef="http://www.moravia.com" its:provRef="http://mlwlt.moravia.com/mlwlt-web-test/LogDetailXml.aspx?log=2013-06-06%2018.39.56.719" />
+            </its:provenanceRecords>
+        </header>
+        <body>
+            <trans-unit id="TU0">
+                <source xml:lang="en-us">
+                    <mrk mid="MRK0" mtype="seg">ITS, XLIFF and PROV Example</mrk>
+                    <mrk mid="MRK1" mtype="seg">
+                        Have you ever dreamed of stepping on each of the six continents around the planet during a 
+                        single, amazing trip? Our Around the 
+                        World in 80 Days travel package is specifically designed for this.
+                    </mrk>
+                    <mrk mid="MRK2" mtype="seg">
+                        From the canyons of Arizona, to the Khmer temples deep in the 
+                        jungle; from the tropical beaches of Queensland to the glaciers of Antarctica; or from 
+                        the wild savanna of 
+                        Africa
+                        to mysterious castles in the forests of
+                        Bohemia,
+                        our offer takes you in some of the most amazing places on our planet.
+                        In 80 days, you will see more of the world than most
+                        see through their entire lifetime!
+                    </mrk>
+                </source>
+                <seg-source xml:lang="en-us">
+                    <mrk mid="SM0" mtype="seg">ITS, XLIFF and PROV Example</mrk>
+                    <mrk mid="SM1" mtype="seg">
+                        Have you ever dreamed of stepping on each of the six continents around the planet during a 
+                        single, amazing trip? Our Around the 
+                        World in 80 Days travel package is specifically designed for this.
+                    </mrk>
+                    <mrk mid="SM2" mtype="seg">
+                        From the canyons of Arizona, to the Khmer temples deep in the 
+                        jungle; from the tropical beaches of Queensland to the glaciers of Antarctica; or from 
+                        the wild savanna of 
+                        Africa
+                        to mysterious castles in the forests of
+                        Bohemia,
+                        our offer takes you in some of the most amazing places on our planet.
+                        In 80 days, you will see more of the world than most
+                        see through their entire lifetime!
+                    </mrk>
+                </seg-source>
+                <alt-trans mid="SM0" match-quality="0.749" origin="MT" its:annotatorsRef="mtconfidence|http://mlwlt.moravia.com/mlwlt-service-xliff-mt/mlwlt-service.asmx" its:provenanceRecordsRef="#1">
+                    <source xml:lang="en-us">ITS, XLIFF and PROV Example</source>
+                    <target xml:lang="es-es">Su ? xliff prov ejemplo, y</target>
+                </alt-trans>
 
-<alt-trans mid="SM0" match-quality="0.749" origin="MT" its:annotatorsRef="mtconfidence|http://mlwlt.moravia.com/mlwlt-service-xliff-mt/mlwlt-service.asmx" its:provenanceRecordsRef="#1">
-<source xml:lang="en-us">ITS, XLIFF and PROV Example</source><target xml:lang="es-es">Su ? xliff prov ejemplo, y</target>
-</alt-trans>
+                <alt-trans mid="SM1" match-quality="0.749" origin="MT" its:annotatorsRef="mtconfidence|http://mlwlt.moravia.com/mlwlt-service-xliff-mt/mlwlt-service.asmx" its:provenanceRecordsRef="#1">
+                    <source xml:lang="en-us">Have you ever dreamed of stepping on each of the six continents around the planet during a single, amazing trip? Our Around the World in 80 Days travel package is specifically designed for this. </source>
+                    <target xml:lang="es-es">¿alguna vez han soñado por cada uno de los seis continentes en todo el planeta durante un viaje asombroso? nuestra única, en todo el mundo en 80 días de viaje se Ha diseñado específicamente para este paquete.</target>
+                </alt-trans>
 
-<alt-trans mid="SM1" match-quality="0.749" origin="MT" its:annotatorsRef="mtconfidence|http://mlwlt.moravia.com/mlwlt-service-xliff-mt/mlwlt-service.asmx" its:provenanceRecordsRef="#1">
-<source xml:lang="en-us">Have you ever dreamed of stepping on each of the six continents around the planet during a single, amazing trip? Our Around the World in 80 Days travel package is specifically designed for this. </source>
-<target xml:lang="es-es">¿alguna vez han soñado por cada uno de los seis continentes en todo el planeta durante un viaje asombroso? nuestra única, en todo el mundo en 80 días de viaje se Ha diseñado específicamente para este paquete.</target>
-</alt-trans>
-
-<alt-trans mid="SM2" match-quality="0.749" origin="MT" its:annotatorsRef="mtconfidence|http://mlwlt.moravia.com/mlwlt-service-xliff-mt/mlwlt-service.asmx" its:provenanceRecordsRef="#1">
-<source xml:lang="en-us">From the canyons of Arizona, to the Khmer temples deep in the jungle; from the tropical beaches of Queensland to the glaciers of Antarctica; or from the wild savanna of Africa to mysterious castles in the forests of Bohemia, our offer takes you in some of the most amazing places on our planet. In 80 days, you will see more of the world than most see through their entire lifetime!</source><target xml:lang="es-es">Desde el canyons de Arizona, para el régimen de templos profunda en la selva tropical, de las playas de Queensland de los glaciares de la Antártida, o de animales salvajes savana de África en el misterioso castillos en el bosque de Bohemia, nuestra oferta tenga usted en algunos de los lugares más extraordinarios de nuestro planeta. en 80 días, veremos más del mundo que la mayoría De ver a través de toda su vida!</target>
-</alt-trans></trans-unit>
-</body>
-</file>
+                <alt-trans mid="SM2" match-quality="0.749" origin="MT" its:annotatorsRef="mtconfidence|http://mlwlt.moravia.com/mlwlt-service-xliff-mt/mlwlt-service.asmx" its:provenanceRecordsRef="#1">
+                    <source xml:lang="en-us">From the canyons of Arizona, to the Khmer temples deep in the jungle; from the tropical beaches of Queensland to the glaciers of Antarctica; or from the wild savanna of Africa to mysterious castles in the forests of Bohemia, our offer takes you in some of the most amazing places on our planet. In 80 days, you will see more of the world than most see through their entire lifetime!</source>
+                    <target xml:lang="es-es">Desde el canyons de Arizona, para el régimen de templos profunda en la selva tropical, de las playas de Queensland de los glaciares de la Antártida, o de animales salvajes savana de África en el misterioso castillos en el bosque de Bohemia, nuestra oferta tenga usted en algunos de los lugares más extraordinarios de nuestro planeta. en 80 días, veremos más del mundo que la mayoría De ver a través de toda su vida!</target>
+                </alt-trans>
+            </trans-unit>
+        </body>
+    </file>
 </xliff>

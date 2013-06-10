@@ -3,7 +3,7 @@
 namespace mlwlt_service;
 
 require_once __DIR__."/../XLIFFVersionEnum.php";
-
+error_reporting(E_ALL^ E_WARNING);
 
 header('Content-Type: text/html; charset=UTF-8');
 mb_internal_encoding('UTF-8');
@@ -131,15 +131,16 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                 $segments = $unit->getElementsByTagName("segment");
                 foreach($segments as $segment) { 
                     
-                    $segmentSourceValue =$segment->getElementsByTagName("source")->item(0)->nodeValue;
-//                    $seg=  simplexml_import_dom($segment);
-//                    $pos = strpos($segmentSourceValue, "<".$seg->getName());
+                    $segmentSourceValue =  strip_tags($doc->saveXML($segment->getElementsByTagName("source")->item(0)));
+//                    $segmentSourceValue =  $doc->saveXML($segment->getElementsByTagName("source")->item(0));
+//                   
+//                    $pos = strpos($segmentSourceValue, "<source");
 //                    if($pos ===0){
 //                        $pos = strpos($segmentSourceValue, ">")+1;
 //                        $segmentSourceValue=  substr($segmentSourceValue, $pos);
-//                        $pos = strrpos($text, "</".$seg->getName().">");
+//                        $pos = strrpos($segmentSourceValue, "</source>");
 //                        $segmentSourceValue= substr_replace($segmentSourceValue,"",$pos);
-                    //}
+//                    }
                     $mrk = $xliff1x->createElement("mrk", $segmentSourceValue);
                     $mrk->setAttribute("mid", "MRK$i");
                     $mrk->setAttribute("mtype", "seg");                    
@@ -163,9 +164,38 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                 
                 
             }
-            $data = $doc->saveXML();
-            $xliff1xText = $xliff1x->saveXML();   
+//            $data = $doc->saveXML();
+            $xliff1xText = htmlspecialchars_decode($xliff1x->saveXML());   
             
+//            $mrkDoc = new \DOMDocument();
+//            $mrkDoc->loadXML($xliff1xText);
+//            
+//            $xpath = new \DOMXPath($mrkDoc);
+//            $markers = $xpath->query("//*[local-name() = 'mrk']");
+//            $invalid =array("id","ref","value","fs","subFs","storageRestriction","sizeRestriction" );
+//            foreach($markers as $marker) {
+//                $attribs = $marker->attributes;
+//                
+//                foreach($attribs as $attrib) {
+//                    if (in_array($attrib->name, $invalid))$marker->removeAttribute($attrib->name);
+//                    else{
+//                        if(strcasecmp($attrib->name,"translate")===0 && strcasecmp($attrib->value,"no")===0){
+//                        $marker->setAttribute("mtype", "protected");
+//                        $marker->removeAttribute($attrib->name);
+//                        }
+//                        if((strcasecmp($attrib->name,"type")===0 && strcasecmp($attrib->value,"term")===0)||(strcasecmp($attrib->name,"terminology")===0 && strcasecmp($attrib->value,"yes")===0)){
+//                            $marker->setAttribute("mtype", "term");
+//                            $marker->removeAttribute($attrib->name);
+//                        } else {
+//                            $marker->removeAttribute($attrib->name);
+//                        }
+//                        if(strpos($attrib->name, "taConf")===0 || strpos($attrib->name, "taClass")===0 ||strpos($attrib->name, "taIdent")===0){
+//                            if(strcasecmp("term",$marker->getAttribute("mtype"))!==0 ||is_null($marker->getAttribute("mtype")))$marker->setAttribute("mtype", "phrase");
+//                        }
+//                    }
+//                }
+//            }
+//             $xliff1xText=  htmlspecialchars_decode($mrkDoc->saveXML());
 
 
             $data = new mlwlt_xliff_mt_prepare();
@@ -177,27 +207,74 @@ class mlwlt_service extends \SoapClient implements \IProvider {
             $doc2 = new \DOMDocument();
             $doc2->loadXML($xliff1xText);
             $xPath = new \DOMXPath($doc2);
-
+            $fileNodes =$doc->getElementsByTagName("file");
+            $pRecs = $xPath->query("//*[local-name()='provenanceRecords']");
+            
+            foreach($pRecs as $pRec) {
+                if(is_numeric($xid=$pRec->getAttribute("xml:id"))){
+                            $pRec->setAttribute("xml:id","pr$xid");
+                            $xliff1xText = str_replace("#$xid", "#pr$xid", $xliff1xText);
+                }
+                foreach($fileNodes as $f) {
+                     $placeholder = $f->getElementsByTagName("group")->item(0);
+                    if(is_null($placeholder)) {
+                        $placeholder = $f->getElementsByTagName("unit")->item(0);
+                    }
+                    $f->insertBefore($doc->importNode($pRec,true), $placeholder);
+                }
+            }
+            $doc2->loadXML($xliff1xText);
+            $xPath = new \DOMXPath($doc2);
             $altTrans = $xPath->query("//*[local-name()='alt-trans']");
 //            $matches = $doc->getElementsByTagName("match");
-
             
             foreach($altTrans as $altTran) {
                 $currentSeg = $map[$altTran->getAttribute("mid")];
-                
+//                $matches = $xPath->query("//*[local-name()='matches']",$currentSeg);
+//                $matchPrefix = $doc->lookupPrefix("urn:oasis:names:tc:xliff:matches:2.0");
                 $matches = $currentSeg->getElementsByTagName("matches")->item(0);
-                if(is_null($matches)){
+                if(is_null($matches)||$matches===false){
+//                    if(is_null($matchPrefix) || $matchPrefix="") {
+//                        $doc->firstChild->setAttributeNS('http://www.w3.org/2000/xmlns/',"xmlns:mtc","urn:oasis:names:tc:xliff:matches:2.0");
+//                                
+//                        $matchPrefix = "mtc";
+//                    }
+//                    $matches = $doc->createElement("{$matchPrefix}:matches");
                     $matches = $doc->createElement("matches");
                     $currentSeg->appendChild($matches);
-                }
+                } //else $matches= $matches->item(0);
                 
                 $altSource = $altTran->getElementsByTagName("source")->item(0);
                 $altTarget = $altTran->getElementsByTagName("target")->item(0);
                 
+                  $segmentSourceValue =  strip_tags($doc2->saveXML($altSource));
+//                  $segmentSourceValue =  $doc2->saveXML($altSource);
+//                   
+//                    $pos = strpos($segmentSourceValue, "<source");
+//                    if($pos ===0){
+//                        $pos = strpos($segmentSourceValue, ">")+1;
+//                        $segmentSourceValue=  substr($segmentSourceValue, $pos);
+//                        $pos = strrpos($segmentSourceValue, "</source>");
+//                        $segmentSourceValue= substr_replace($segmentSourceValue,"",$pos);
+//                    }
+//                    
+                    
+                
+//                $match = $doc->createElement("{$matchPrefix}:match");
                 $match = $doc->createElement("match");
-                $matchSource = $doc->createElement("source", $altSource->nodeValue);
+                $matchSource = $doc->createElement("source", $segmentSourceValue);
                 $matchSource->setAttribute("xml:lang", $sourceLang);
-                $matchTarget = $doc->createElement("target", $altTarget->nodeValue);
+                
+                  $segmentSourceValue =  strip_tags($doc2->saveXML($altTarget));
+//                  $segmentSourceValue =  $doc2->saveXML($altTarget);
+//                    $pos = strpos($segmentSourceValue, "<target");
+//                    if($pos ===0){
+//                        $pos = strpos($segmentSourceValue, ">")+1;
+//                        $segmentSourceValue=  substr($segmentSourceValue, $pos);
+//                        $pos = strrpos($segmentSourceValue, "</target>");
+//                        $segmentSourceValue= substr_replace($segmentSourceValue,"",$pos);
+//                    }
+                $matchTarget = $doc->createElement("target", $segmentSourceValue);
 
                 $match->appendChild($matchSource);
                 $match->appendChild($matchTarget);
@@ -210,7 +287,7 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                     if(strcasecmp($attrib->name,"match-quality")==0){
                         $match->setAttribute("match-suitability", $attrib->value);
                     }
-                    else $match->setAttribute($attrib->name, $attrib->value);
+                    else $match->setAttribute(is_null($attrib->prefix)?$attrib->name:"{$attrib->prefix}:{$attrib->name}", $attrib->value );
                 }
                
             }

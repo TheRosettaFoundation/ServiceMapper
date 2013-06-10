@@ -2,7 +2,7 @@
 header('Content-Type: text/xml; charset=utf-8');
 mb_internal_encoding('UTF-8');
 
-
+error_reporting(E_ALL^ E_WARNING);
 require_once __DIR__.'/../IProvider.php';
 //require_once '../IProvider.php';
 
@@ -106,8 +106,8 @@ class Bing extends \SoapClient implements \IProvider {
                         }
 
      
-//                        $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
-                        $translation = $text; // un commont for fake translation
+                        $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
+//                        $translation = $text; // un commont for fake translation
                         
                         
                         $alt_trans = $doc->createElement("alt-trans");
@@ -193,8 +193,14 @@ class Bing extends \SoapClient implements \IProvider {
                 $pRec->setAttribute("its:orgRef", "http://www.microsoft.com");
                 $pRec->setAttribute("its:provRef", "http://api.microsofttranslator.com/V2/Http.svc/Translate");
                 $pRecs->appendChild($pRec);
-                $fileElement = $doc->getElementsByTagName("file")->item(0);
-                $fileElement->appendChild($pRecs);
+                $fileElements = $doc->getElementsByTagName("file");
+                 foreach ($fileElements as $fileElement){
+                    $placeholder = $doc->getElementsByTagName("group")->item(0);
+                    if(is_null($placeholder)) {
+                        $placeholder = $doc->getElementsByTagName("unit")->item(0);
+                    }
+                    $fileElement->insertBefore($doc->importNode($pRecs,true), $placeholder);
+                 }
 
                 if($segments = $doc->getElementsByTagName("segment")) {
                     foreach($segments as $segment ){  
@@ -212,13 +218,17 @@ class Bing extends \SoapClient implements \IProvider {
                             
                             $matches = $doc->createElement("matches");
                             $match = $doc->createElement("match");
+                            $match->setAttribute("its:provenanceRecordsRef", "#pr$i");
                             $matchSource= $doc->createElement("source");
                             $matchSource->setAttribute("xml:lang", $source);
                             $matchSource->appendChild(new \DOMText($segmentText));
                             $match->appendChild($matchSource);
                             
+                            
                             $translation = $this->translate($source, $target, $segmentText);
 //                            $translation = $segmentText; // fake translation
+                            
+                            
                             $matchTarget= $doc->createElement("target");
                             $matchTarget->setAttribute("xml:lang", $target);
                             $matchTarget->appendChild(new \DOMText($translation));

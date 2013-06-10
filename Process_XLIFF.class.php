@@ -168,27 +168,23 @@ class XLIFF {
             $translatedFiles = $this->translateFiles($xliff, $source, $target);
             $result = $doc->saveXML();
             ProviderHelper::enrichFile($xliffVersion, $result, $translatedFiles);
-
-    //      just return $result ?
-            $doc->loadXML($result);
-            $doc->formatOutput = true; //this line format output when browsing HTML source.
+            $doc->formatOutput = true; 
             $doc->preserveWhiteSpace=false;
+            $doc->loadXML($result);
+            
             $doc->normalizeDocument();
             $data = $doc->saveXML();
-    //        $tidy = new \tidy();
-    //        $config = array(
-    //            'indent' => true,
-    //            'indent-spaces' => 4,
-    //            'tab-size' => 4,
-    //            'indent-attributes' => true,
-    //            'hide-comments' => false,
-    //            'output-xml' => true
-    //        );
-            return $data;//$tidy->repairString($data,$config,'UTF8');
+            
+          
+            return $data;
     }
             
+
+   
     
 }
+
+
 
 //$xliff = new XLIFF();
 //$data = file_get_contents("uploads/EXc-xliff-prov-rt-1-post-seg.xlf");
