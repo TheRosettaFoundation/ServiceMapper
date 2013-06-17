@@ -292,9 +292,16 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                
             }
 
-        }
-
         return $doc->saveXML(); 
+
+        }
+	else {
+	 $data = new mlwlt_xliff_mt_prepare();
+            $data->xliff_input = base64_encode($Filetext);
+            $result = $this->mlwlt_xliff_mt_prepare($data);
+            $xliff1xText =  base64_decode($result->mlwlt_xliff_mt_prepareResult);
+         return $xliff1xText;
+	}
     }
 
     public function getSourceLanguages() {
@@ -306,7 +313,7 @@ class mlwlt_service extends \SoapClient implements \IProvider {
     }
 
 }
-//
+
 //$temp = new mlwlt_service();
 //echo $temp->translateFile(file_get_contents(__DIR__."/../test/EXc-xliff-prov-rt-1-post-seg.xlf"));
 //echo $temp->translateFile(file_get_contents(__DIR__."/../test/xliff3Test.xlf"));
