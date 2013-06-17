@@ -285,7 +285,7 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                 foreach($attribs as $attrib) {
                     if(strcasecmp($attrib->name,"mid")==0) continue;
                     if(strcasecmp($attrib->name,"match-quality")==0){
-                        $match->setAttribute("match-suitability", $attrib->value);
+                        $match->setAttribute("matchSuitability", $attrib->value);
                     }
                     else $match->setAttribute(is_null($attrib->prefix)?$attrib->name:"{$attrib->prefix}:{$attrib->name}", $attrib->value );
                 }
