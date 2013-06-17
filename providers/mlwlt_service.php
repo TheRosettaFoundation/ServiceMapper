@@ -308,9 +308,8 @@ class mlwlt_service extends \SoapClient implements \IProvider {
 }
 //
 //$temp = new mlwlt_service();
+//echo $temp->translateFile(file_get_contents(__DIR__."/../test/EXc-xliff-prov-rt-1-post-seg.xlf"));
 //echo $temp->translateFile(file_get_contents(__DIR__."/../test/xliff3Test.xlf"));
 //$content = file_get_contents("/home/sean/Desktop/lucia/simple_short.xlf");
 //$content = mb_convert_encoding($content, 'UTF-16', 'UTF-8');
 //echo $content;
-
-
