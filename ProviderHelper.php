@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 mb_internal_encoding('UTF-8');
+require_once __DIR__.'/IProvider.php';
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -12,6 +13,7 @@ mb_internal_encoding('UTF-8');
  * @author sean
  */
 class ProviderHelper {
+    
     private static function autoRequire(array $providers,$root="providers") {
         foreach($providers as $provider){
             require_once ProviderHelper::getSetting($root).$provider.".php";
@@ -133,8 +135,8 @@ class ProviderHelper {
                     if(is_null($placeholder)) {
                         $placeholder = $file->getElementsByTagName("unit")->item(0);
                     }
-                    $fileElement->insertBefore($file->importNode($pRec,true), $placeholder);
-                    
+                    //$fileElement->insertBefore($file->importNode($pRec,true), $placeholder);
+                    $fileElement->appendChild($file->importNode($pRec,true));
                 }
                 
             }else{
@@ -142,7 +144,8 @@ class ProviderHelper {
                     if(is_null($placeholder)) {
                         $placeholder = $file->getElementsByTagName("unit")->item(0);
                     }
-                    $fileElement->insertBefore($file->importNode($pRec,true), $placeholder);
+                    //$fileElement->insertBefore($file->importNode($pRec,true), $placeholder);
+                    $fileElement->appendChild($file->importNode($pRec,true));
             }
         }
         $fileText =$file->saveXML(); 
@@ -182,8 +185,8 @@ class ProviderHelper {
         $file2 = new DOMDocument();
         $file2->loadXML($fileText2);
         $xPath2 = new \DOMXPath($file2);
-        $segments = $file->getElementsByTagName("segment"); 
-       $segments2 = $file2->getElementsByTagName("segment"); 
+        $segments = $file->getElementsByTagName("unit"); 
+        $segments2 = $file2->getElementsByTagName("unit"); 
 //        if($matches2 = $xPath2->query("//*[local-name()='matches']")){
             for($i=0; $i < $segments2->length; $i++) {
 
@@ -192,7 +195,11 @@ class ProviderHelper {
 
 //                $matches = $xPath->query("//*[local-name()='matches']");
 //                $matchPrefix = $file->lookupPrefix("urn:oasis:names:tc:xliff:matches:2.0");
+                
+                $prefix = $file->lookupPrefix(\IProvider::XMLNS_MTC);
                 $matches = $segment->getElementsByTagName("matches")->item(0);
+                
+                //$matches = $segment->getElementsByTagName("matches")->item(0);
 //                if($matches===false||$matches->length===0){
 ////                    if(is_null($matchPrefix) || $matchPrefix="") {
 ////                        $doc->firstChild->setAttributeNS('http://www.w3.org/2000/xmlns/',"xmlns:mtc","urn:oasis:names:tc:xliff:matches:2.0");
@@ -203,11 +210,13 @@ class ProviderHelper {
 //                    $segment->appendChild($matches);
 //                } else $matches= $matches->item(0);
                 if(is_null($matches)){
-                    $matches = $file->createElement("matches");
+                    $prefix = $file->lookupPrefix(\IProvider::XMLNS_MTC) ;
+                    $matches = $file->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
                     $segment->appendChild($matches);
                 }
 
                 $matchElements = $segment2->getElementsByTagName("match");
+                //$matchElements = $segment2->getElementsByTagName("match");
 //                $matchElements = $xPath2->query("//*[local-name()='match']",$match2);
 //                if($matchElements && $matchElements->length>0){
                     foreach($matchElements as $matchElement){
@@ -217,6 +226,8 @@ class ProviderHelper {
 //                }
 //            }
         }
+        
+        
         $fileText=$file->saveXML();
     }
 }

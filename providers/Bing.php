@@ -106,8 +106,8 @@ class Bing extends \SoapClient implements \IProvider {
                         }
 
      
-                        $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
-//                        $translation = $text; // un commont for fake translation
+                        //$translation = $this->translate($sourceLanguage,$targetLanguage,$text);
+                        $translation = $text; // un comment for fake translation
                         
                         
                         $alt_trans = $doc->createElement("alt-trans");
@@ -203,7 +203,13 @@ class Bing extends \SoapClient implements \IProvider {
                  }
 
                 if($segments = $doc->getElementsByTagName("segment")) {
+                    $segCount= 0;
                     foreach($segments as $segment ){  
+                        $idVal = $segment->getAttribute("id");
+//                        if(!$segment->hasAttribute("id")){ 
+//                            $idVal=$unit->getAttribute("id")."|".$segCount++;
+//                            $segment->setAttribute("id", $idVal);
+//                        }
                         $sourceElement = simplexml_import_dom($segment->getElementsByTagName("source")->item(0));
                         $segmentText = $sourceElement->asXML();
                          $pos = strpos($segmentText, "<".$sourceElement->getName());
@@ -215,18 +221,29 @@ class Bing extends \SoapClient implements \IProvider {
                             }
                         $translateSegment = ($segment->hasAttribute("translate") && $segment->getAttribute("translate")=="yes") || (!$segment->hasAttribute("translate")||$translateUnit);
                         if($translateSegment) {
+                            $matches = null;
+                            $unitElement = $doc->getElementsByTagName("unit")->item(0);
                             
-                            $matches = $doc->createElement("matches");
-                            $match = $doc->createElement("match");
+                            $prefix = $doc->lookupPrefix(\IProvider::XMLNS_MTC);     
+                            if($doc->getElementsByTagNameNS(\IProvider::XMLNS_MTC, "matches")->length == 0) {
+                                $matches = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
+                            } else {
+                                $matches = $doc->getElementsByTagNameNS(\IProvider::XMLNS_MTC, "matches")->item(0);
+                            }
+                 
+                            $match = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
                             $match->setAttribute("its:provenanceRecordsRef", "#pr$i");
                             $matchSource= $doc->createElement("source");
                             $matchSource->setAttribute("xml:lang", $source);
-                            $matchSource->appendChild(new \DOMText($segmentText));
+                            $idMRK = $doc->createElement("mrk");
+                            $idMRK->appendChild(new \DOMText($segmentText));
+                            $idMRK->setAttribute("ref", "#".$idVal);
+                            $matchSource->appendChild($idMRK);
                             $match->appendChild($matchSource);
                             
                             
-                            $translation = $this->translate($source, $target, $segmentText);
-//                            $translation = $segmentText; // fake translation
+                            //$translation = $this->translate($source, $target, $segmentText);
+                            $translation = $segmentText; // fake translation
                             
                             
                             $matchTarget= $doc->createElement("target");
@@ -235,7 +252,9 @@ class Bing extends \SoapClient implements \IProvider {
                             $match->appendChild($matchTarget);
                             
                             $matches->appendChild($match);
-                            $segment->appendChild($matches);                            
+                            //$segment->appendChild($matches); 
+                            $unitElement->appendChild($matches);
+
                             
                             $temp = new \DOMDocument();
                             $saved = htmlspecialchars_decode($doc->saveXML());
@@ -260,7 +279,10 @@ class Bing extends \SoapClient implements \IProvider {
                             $count++;
                             $finalTarget= $doc->createElement("target");
                             $finalTarget->setAttribute("xml:lang", $target);
-                            $finalTarget->appendChild(new \DOMText($translation));
+                            $idMRK = $doc->createElement("mrk");
+                            $idMRK->appendChild(new \DOMText($translation));
+                            $idMRK->setAttribute("ref", "#".$idVal);
+                            $finalTarget->appendChild($idMRK);
                             $match->appendChild($finalTarget);
                             $match->removeChild($matchTarget);
                         }
@@ -328,8 +350,8 @@ class Bing extends \SoapClient implements \IProvider {
     } 
 }
 //$bing= new Bing();
-////
-//echo $bing->translateFile(file_get_contents(__DIR__."/../uploads/EXe-xliff-prov-rt-1-post-term.xlf"), "en","es");
 //
+//echo $bing->translateFile(file_get_contents(__DIR__."/../test/newtest.xlf"), "en","es");
+//"__DIR__."/../uploads/EXe-xliff-prov-rt-1-post-term.xlf""
 
 //echo $bing->translateFile(file_get_contents("/home/manuel/Downloads/xliff2Test.xlf"), "en","es");

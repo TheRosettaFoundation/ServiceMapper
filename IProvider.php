@@ -10,6 +10,9 @@
  * @author sean
  */
 interface IProvider {
+    
+    const XMLNS_MTC = 'urn:oasis:names:tc:xliff:matches:2.0';
+    const XMLNS_ITS = 'http://www.w3.org/2005/11/its';
     /**
      * return the translated file 
      * @return String

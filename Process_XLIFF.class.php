@@ -19,6 +19,17 @@ class XLIFF {
         $phasename = 'MT-Leverage';
         $doc = new DOMDocument();
         $doc->loadXML($xliff);
+        
+
+        $segCount= 0;
+        foreach($doc->getElementsByTagName("segment") as $segment ){  
+            if(!$segment->hasAttribute("id")){ 
+                $idVal="segID_".$segCount++;
+                $segment->setAttribute("id", $idVal);
+            }
+        }
+        $xliff = htmlspecialchars_decode($doc->saveXML());
+        
         $xliffVersion = $doc->firstChild->getAttribute('version');
         
         if($xliffVersion == XLIFFVersionEnum::XLIFF_2_0) {
