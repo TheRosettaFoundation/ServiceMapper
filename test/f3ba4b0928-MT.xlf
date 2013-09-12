@@ -1,0 +1,157 @@
+<xliff xmlns:xlf="urn:oasis:names:tc:xliff:document:2.0" xmlns:its="http://www.w3.org/2005/11/its" xmlns:gls="urn:oasis:names:tc:xliff:glossary:2.0" xmlns:mtc="urn:oasis:names:tc:xliff:matches:2.0" xmlns:mda="urn:oasis:names:tc:xliff:metadata:2.0" version="2.0" srcLang="en-us" tgtLang="es-es">
+  <file id="sampleFile">
+    <gls:glossary>
+      <gls:glossentry id="ge1">
+        <gls:term>Arizona</gls:term>
+        <gls:translation>Arizona</gls:translation>
+      </gls:glossentry>
+      <gls:glossentry id="ge2">
+        <gls:term>Antarctica</gls:term>
+        <gls:translation>Antarctique</gls:translation>
+      </gls:glossentry>
+      <gls:glossentry id="ge3">
+        <gls:term>Africa</gls:term>
+        <gls:translation>Afrique</gls:translation>
+      </gls:glossentry>
+      <gls:glossentry id="ge4">
+        <gls:term>Bohemia</gls:term>
+        <gls:translation>Bohême</gls:translation>
+      </gls:glossentry>
+    </gls:glossary>
+    <mda:metadata>
+      <mda:metagroup category="pmui-data">
+        <mda:meta type="pname">Test Project - Thursday the 12th</mda:meta>
+        <mda:meta type="pdescription">Thu, 12 Sep 13 12:22:58 +0100</mda:meta>
+        <mda:meta type="startdate">12/09/2013</mda:meta>
+        <mda:meta type="deadline">22/09/2013</mda:meta>
+        <mda:meta type="budget">1000</mda:meta>
+        <mda:meta type="qrequirement">HIGH</mda:meta>
+        <mda:meta type="use-mt">YES</mda:meta>
+        <mda:meta type="client">OTHER</mda:meta>
+        <mda:meta type="lkr">NO</mda:meta>
+        <mda:meta type="ta">NO</mda:meta>
+        <mda:meta type="tp">NO</mda:meta>
+        <mda:meta type="lmc">NO</mda:meta>
+      </mda:metagroup>
+      <mda:metagroup category="workflow_entry">
+        <mda:meta type="tool_id">MT</mda:meta>
+        <mda:meta type="order">1</mda:meta>
+      </mda:metagroup>
+    </mda:metadata>
+    <unit id="unit_1" translate="yes">
+      <segment>
+        <source xml:lang="en-us">ITS, XLIFF and PROV Example</source>
+        <matches>
+          <match its:provenanceRecordsRef="#pr1">
+            <source xml:lang="en">ITS, XLIFF and PROV Example</source>
+            <target xml:lang="es">SU, XLIFF y ejemplo PROV</target>
+          </match>
+          <match matchSuitability="0.749" :origin="MT" its:annotatorsRef="mtconfidence|http://mlwlt.moravia.com/mlwlt-service-xliff-mt/mlwlt-service.asmx" its:provenanceRecordsRef="#pr2">
+            <source xml:lang="en-us">ITS, XLIFF and PROV Example</source>
+            <target>Su ? xliff prov ejemplo, y</target>
+          </match>
+          <match its:provenanceRecordsRef="#pr3">
+            <source xml:lang="en">ITS, XLIFF and PROV Example</source>
+            <target xml:lang="es"/>
+          </match>
+        </matches>
+      </segment>
+      <segment>
+        <source xml:lang="en-us">
+                    Have you ever dreamed of stepping on each of the six continents around the planet during a 
+                    single, amazing trip? Our <g id="1">Around the 
+                    World in 80 Days</g> travel package is specifically designed for this.
+                </source>
+        <matches>
+          <match its:provenanceRecordsRef="#pr0">
+            <source xml:lang="en">
+                    Have you ever dreamed of stepping on each of the six continents around the planet during a 
+                    single, amazing trip? Our <g id="1">Around the 
+                    World in 80 Days</g> travel package is specifically designed for this.
+                </source>
+            <target xml:lang="es">¿Alguna vez has soñado con pisar a cada uno de los seis continentes alrededor del planeta durante un viaje único y sorprendente? Nuestro paquete de viaje de <g id="1">Vuelta al mundo en 80 días</g> está diseñado específicamente para ello.</target>
+          </match>
+          <match matchSuitability="0.749" :origin="MT" its:annotatorsRef="mtconfidence|http://mlwlt.moravia.com/mlwlt-service-xliff-mt/mlwlt-service.asmx" its:provenanceRecordsRef="#pr2">
+            <source xml:lang="en-us">Have you ever dreamed of stepping on each of the six continents around the planet during a single, amazing trip? Our Around the World in 80 Days travel package is specifically designed for this. </source>
+            <target>¿alguna vez han soñado por cada uno de los seis continentes en todo el planeta durante un viaje asombroso? nuestra única, en todo el mundo en 80 días de viaje se Ha diseñado específicamente para este paquete.</target>
+          </match>
+          <match its:provenanceRecordsRef="#pr0">
+            <source xml:lang="en">
+                    Have you ever dreamed of stepping on each of the six continents around the planet during a 
+                    single, amazing trip? Our <g id="1">Around the 
+                    World in 80 Days</g> travel package is specifically designed for this.
+                </source>
+            <target xml:lang="es">
+haber se cada vez que soñaban de dejar en cada uno de los seis continentes en todo el planeta durante un
+single, increíble trip? nuestra <g id="1">around el
+mundo en 80 days</g> paquete de viajes está diseñado para this. específicamente
+</target>
+          </match>
+        </matches>
+      </segment>
+      <segment>
+        <source xml:lang="en-us">
+                    From the canyons of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Arizona"><mrk its:terminology="yes" its:termInfoRef="#ge1">Arizona</mrk></mrk>, to the Khmer temples deep in the 
+                    jungle; from the tropical beaches of Queensland to the glaciers of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Antarctica"><mrk its:terminology="yes" its:termInfoRef="#ge2">Antarctica</mrk></mrk>; or from 
+                    the wild savanna of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Africa"><mrk its:terminology="yes" its:termInfoRef="#ge3">Africa</mrk></mrk>
+                    to mysterious castles in the forests of
+                    <mrk mtype="x-its" its:terminology="yes" its:termInfoRef="#ge4">Bohemia</mrk>,
+                    our offer takes you in some of the most amazing places on our planet.
+                    In 80 days, you will see more of the world than most
+                    see through their entire lifetime!
+                </source>
+        <matches>
+          <match its:provenanceRecordsRef="#pr0">
+            <source xml:lang="en">
+                    From the canyons of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Arizona"><mrk its:terminology="yes" its:termInfoRef="#ge1">Arizona</mrk></mrk>, to the Khmer temples deep in the 
+                    jungle; from the tropical beaches of Queensland to the glaciers of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Antarctica"><mrk its:terminology="yes" its:termInfoRef="#ge2">Antarctica</mrk></mrk>; or from 
+                    the wild savanna of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Africa"><mrk its:terminology="yes" its:termInfoRef="#ge3">Africa</mrk></mrk>
+                    to mysterious castles in the forests of
+                    <mrk mtype="x-its" its:terminology="yes" its:termInfoRef="#ge4">Bohemia</mrk>,
+                    our offer takes you in some of the most amazing places on our planet.
+                    In 80 days, you will see more of the world than most
+                    see through their entire lifetime!
+                </source>
+            <target xml:lang="es">De los cañones de <mrk its:taconfidence="0.7" its:taclassref="http://nerd.eurecom.fr/ontology#Place" its:taidentref="http://dbpedia.org/resource/Arizona"><mrk its:terminology="yes" its:terminforef="#ge1">Arizona</mrk></mrk>, a los templos Khmer en la selva; desde las playas tropicales de Queensland a los glaciares de <mrk its:taconfidence="0.7" its:taclassref="http://nerd.eurecom.fr/ontology#Place" its:taidentref="http://dbpedia.org/resource/Antarctica"><mrk its:terminology="yes" its:terminforef="#ge2">la Antártida</mrk></mrk>; o de la sabana salvaje de <mrk its:taconfidence="0.7" its:taclassref="http://nerd.eurecom.fr/ontology#Place" its:taidentref="http://dbpedia.org/resource/Africa"><mrk its:terminology="yes" its:terminforef="#ge3">África</mrk></mrk> a los misteriosos castillos en los bosques de <mrk mtype="x-its" its:terminology="yes" its:terminforef="#ge4">Bohemia</mrk>, nuestra oferta te lleva en algunos de los lugares más increíbles de nuestro planeta.
+                    En 80 días, usted verá más del mundo que más ver a través de toda su vida!</target>
+          </match>
+          <match matchSuitability="0.749" :origin="MT" its:annotatorsRef="mtconfidence|http://mlwlt.moravia.com/mlwlt-service-xliff-mt/mlwlt-service.asmx" its:provenanceRecordsRef="#pr2">
+            <source xml:lang="en-us">From the canyons of Arizona, to the Khmer temples deep in the jungle; from the tropical beaches of Queensland to the glaciers of Antarctica; or from the wild savanna of Africa to mysterious castles in the forests of Bohemia, our offer takes you in some of the most amazing places on our planet. In 80 days, you will see more of the world than most see through their entire lifetime!</source>
+            <target>Desde el canyons de Arizona, para el régimen de templos profunda en la selva tropical, de las playas de Queensland de los glaciares de la Antártida, o de animales salvajes savana de África en el misterioso castillos en el bosque de Bohemia, nuestra oferta tenga usted en algunos de los lugares más extraordinarios de nuestro planeta. en 80 días, veremos más del mundo que la mayoría De ver a través de toda su vida!</target>
+          </match>
+          <match its:provenanceRecordsRef="#pr0">
+            <source xml:lang="en">
+                    From the canyons of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Arizona"><mrk its:terminology="yes" its:termInfoRef="#ge1">Arizona</mrk></mrk>, to the Khmer temples deep in the 
+                    jungle; from the tropical beaches of Queensland to the glaciers of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Antarctica"><mrk its:terminology="yes" its:termInfoRef="#ge2">Antarctica</mrk></mrk>; or from 
+                    the wild savanna of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Africa"><mrk its:terminology="yes" its:termInfoRef="#ge3">Africa</mrk></mrk>
+                    to mysterious castles in the forests of
+                    <mrk mtype="x-its" its:terminology="yes" its:termInfoRef="#ge4">Bohemia</mrk>,
+                    our offer takes you in some of the most amazing places on our planet.
+                    In 80 days, you will see more of the world than most
+                    see through their entire lifetime!
+                </source>
+            <target xml:lang="es">
+de el canyons de <mrk its:taconfidence="0.7" its:taclassref="http://nerd.eurecom.fr/ontology#place" its:taidentref="http://dbpedia.org/resource/arizona"><mrk its:terminology="yes" its:terminforef="#ge1">arizona</mrk></mrk>, a el jemer zoroástricos profunda en el
+jungle; de las playas tropicales de queensland a el los glaciares de <mrk its:taconfidence="0.7" its:taclassref="http://nerd.eurecom.fr/ontology#place" its:taidentref="http://dbpedia.org/resource/antarctica"><mrk its:terminology="yes" its:terminforef="#ge2">antarctica</mrk></mrk>; o de
+el lejano savanna de <mrk its:taconfidence="0.7" its:taclassref="http://nerd.eurecom.fr/ontology#place" its:taidentref="http://dbpedia.org/resource/africa"><mrk its:terminology="yes" its:terminforef="#ge3">africa</mrk></mrk>
+que castillos antiguos misteriosas en los bosques de
+<mrk mtype="x-its" its:terminology="yes" its:terminforef="#ge4">bohemia</mrk>,
+nuestra ofrecer toma se en algunos de los más increíble lugares en nuestra planet.
+en 80 days, se verán más de el mundo que la mayoría de los
+ver a través de sus lifetime!
+</target>
+          </match>
+        </matches>
+      </segment>
+    </unit>
+    <its:provenanceRecords xml:id="pr1">
+      <its:provenanceRecord its:tool="bingtranslate" its:orgRef="http://www.microsoft.com" its:provRef="http://api.microsofttranslator.com/V2/Http.svc/Translate"/>
+    </its:provenanceRecords>
+    <its:provenanceRecords xml:id="pr2">
+      <its:provenanceRecord its:tool="mosesmt" its:orgRef="http://www.moravia.com" its:provRef="http://mlwlt.moravia.com/mlwlt-web-test/LogDetailXml.aspx?log=2013-09-12%2013.59.13.697"/>
+    </its:provenanceRecords>
+    <its:provenanceRecords xml:id="pr3">
+      <its:provenanceRecord its:tool="Panacea" its:orgRef="http://www.cngl.ie/" its:provRef="http://www.cngl.ie/panacea-soaplab2-axis/typed/services/panacea.moses_en_es_europarl"/>
+    </its:provenanceRecords>
+  </file>
+</xliff>			 
