@@ -13,7 +13,7 @@ class Bing extends \SoapClient implements \IProvider {
     }
 
     public function isEnabled(){
-        return true;
+        return false;
     }
     public function getSourceLanguages() {
         return array("ar","fi","it","ru","bg","fr","jp","sk","ca","de","ko","sl",
@@ -225,10 +225,10 @@ class Bing extends \SoapClient implements \IProvider {
                             $unitElement = $doc->getElementsByTagName("unit")->item(0);
                             
                             $prefix = $doc->lookupPrefix(\IProvider::XMLNS_MTC);     
-                            if($doc->getElementsByTagNameNS(\IProvider::XMLNS_MTC, "matches")->length == 0) {
+                            if($doc->getElementsByTagName("matches")->length == 0) {
                                 $matches = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
                             } else {
-                                $matches = $doc->getElementsByTagNameNS(\IProvider::XMLNS_MTC, "matches")->item(0);
+                                $matches = $unit->getElementsByTagName("matches")->item(0);
                             }
                  
                             $match = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
@@ -238,6 +238,7 @@ class Bing extends \SoapClient implements \IProvider {
                             $idMRK = $doc->createElement("mrk");
                             $idMRK->appendChild(new \DOMText($segmentText));
                             $idMRK->setAttribute("ref", "#".$idVal);
+                            $idMRK->setAttribute("type", "match");
                             $matchSource->appendChild($idMRK);
                             $match->appendChild($matchSource);
                             
@@ -282,6 +283,7 @@ class Bing extends \SoapClient implements \IProvider {
                             $idMRK = $doc->createElement("mrk");
                             $idMRK->appendChild(new \DOMText($translation));
                             $idMRK->setAttribute("ref", "#".$idVal);
+                            $idMRK->setAttribute("type", "match");
                             $finalTarget->appendChild($idMRK);
                             $match->appendChild($finalTarget);
                             $match->removeChild($matchTarget);

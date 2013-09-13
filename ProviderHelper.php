@@ -14,6 +14,32 @@ require_once __DIR__.'/IProvider.php';
  */
 class ProviderHelper {
     
+    const INSERT_END = 0;
+    const INSERT_BEFORE = 1;
+    const INSERT_AFTER = 2;
+    
+    public static function insertNode($newNode, $refNode, $insertMode=self::INSERT_END) {
+        
+        if(is_null($insertMode) || $insertMode == self::INSERT_END) {
+            
+            $refNode->appendChild($newNode);
+            
+        } else if($insertMode == self::INSERT_BEFORE) {
+            
+            $refNode->parentNode->insertBefore($newNode, $refNode);
+            
+        } else if($insertMode == self::INSERT_AFTER) {
+            
+            if($refNode->nextSibling) {
+                $refNode->parentNode->insertBefore($newNode, $refNode->nextSibling);
+            } else {
+                $refNode->parentNode->appendChild($newNode);
+            }      
+                  
+        }
+        
+    }
+    
     private static function autoRequire(array $providers,$root="providers") {
         foreach($providers as $provider){
             require_once ProviderHelper::getSetting($root).$provider.".php";
@@ -212,7 +238,9 @@ class ProviderHelper {
                 if(is_null($matches)){
                     $prefix = $file->lookupPrefix(\IProvider::XMLNS_MTC) ;
                     $matches = $file->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
-                    $segment->appendChild($matches);
+                    $placesholder = $segment->getElementsByTagName("segment");
+                    $placesholder= $placesholder->item($placesholder->length-1);
+                    ProviderHelper::insertNode($matches, $placesholder, ProviderHelper::INSERT_AFTER);
                 }
 
                 $matchElements = $segment2->getElementsByTagName("match");

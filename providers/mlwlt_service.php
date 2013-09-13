@@ -48,7 +48,7 @@ require_once __DIR__.'/../IProvider.php';
  */
 class mlwlt_service extends \SoapClient implements \IProvider {
      public function isEnabled(){
-        return false;
+        return true;
     }
 
     private static $classmap = array(
@@ -200,9 +200,9 @@ class mlwlt_service extends \SoapClient implements \IProvider {
 
             $data = new mlwlt_xliff_mt_prepare();
             $data->xliff_input = base64_encode($xliff1xText);
-            $result = $this->mlwlt_xliff_mt_prepare($data);
-            $xliff1xText =  base64_decode($result->mlwlt_xliff_mt_prepareResult);            
-//            $xliff1xText = file_get_contents(__DIR__."/../test/xliff12.xlf"); // fake translation
+            //$result = $this->mlwlt_xliff_mt_prepare($data);
+            //$xliff1xText =  base64_decode($result->mlwlt_xliff_mt_prepareResult);            
+            $xliff1xText = file_get_contents(__DIR__."/../test/xliff12.xlf"); // fake translation
            
             $doc2 = new \DOMDocument();
             $doc2->loadXML($xliff1xText);
@@ -227,22 +227,20 @@ class mlwlt_service extends \SoapClient implements \IProvider {
             $xPath = new \DOMXPath($doc2);
             $altTrans = $xPath->query("//*[local-name()='alt-trans']");
 //            $matches = $doc->getElementsByTagName("match");
-            
+            $prefix = $doc->lookupPrefix(\IProvider::XMLNS_MTC);    
             foreach($altTrans as $altTran) {
                 $currentSeg = $map[$altTran->getAttribute("mid")];
+                $idVal = $currentSeg->getAttribute("id");
 //                $matches = $xPath->query("//*[local-name()='matches']",$currentSeg);
 //                $matchPrefix = $doc->lookupPrefix("urn:oasis:names:tc:xliff:matches:2.0");
-                $matches = $currentSeg->getElementsByTagName("matches")->item(0);
-                if(is_null($matches)||$matches===false){
-//                    if(is_null($matchPrefix) || $matchPrefix="") {
-//                        $doc->firstChild->setAttributeNS('http://www.w3.org/2000/xmlns/',"xmlns:mtc","urn:oasis:names:tc:xliff:matches:2.0");
-//                                
-//                        $matchPrefix = "mtc";
-//                    }
-//                    $matches = $doc->createElement("{$matchPrefix}:matches");
-                    $matches = $doc->createElement("matches");
-                    $currentSeg->appendChild($matches);
-                } //else $matches= $matches->item(0);
+                
+                $matches=null;
+                if($doc->getElementsByTagName("matches")->length == 0) {
+                    $matches = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
+                } else {
+                    $matches = $currentSeg->parentNode->getElementsByTagName("matches")->item(0);
+                }
+                $currentSeg->parentNode->appendChild($matches);
                 
                 $altSource = $altTran->getElementsByTagName("source")->item(0);
                 $altTarget = $altTran->getElementsByTagName("target")->item(0);
@@ -260,10 +258,14 @@ class mlwlt_service extends \SoapClient implements \IProvider {
 //                    
                     
                 
-//                $match = $doc->createElement("{$matchPrefix}:match");
-                $match = $doc->createElement("match");
-                $matchSource = $doc->createElement("source", $segmentSourceValue);
-                $matchSource->setAttribute("xml:lang", $sourceLang);
+                $match = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
+                $sourceMrk = $doc->createElement("mrk", $segmentSourceValue);
+                $sourceMrk->setAttribute("ref", "#".$idVal);
+                $sourceMrk->setAttribute("type", "match");
+                
+                $matchSource = $doc->createElement("source");
+                $matchSource->setAttribute("xml:lang", $sourceLang); 
+                $matchSource->appendChild($sourceMrk);
                 
                   $segmentSourceValue =  strip_tags($doc2->saveXML($altTarget));
 //                  $segmentSourceValue =  $doc2->saveXML($altTarget);
@@ -274,8 +276,12 @@ class mlwlt_service extends \SoapClient implements \IProvider {
 //                        $pos = strrpos($segmentSourceValue, "</target>");
 //                        $segmentSourceValue= substr_replace($segmentSourceValue,"",$pos);
 //                    }
-                $matchTarget = $doc->createElement("target", $segmentSourceValue);
-
+                $targetMrk = $doc->createElement("mrk", $segmentSourceValue);
+                $targetMrk->setAttribute("ref", "#".$idVal);
+                $targetMrk->setAttribute("type", "match");
+                $matchTarget = $doc->createElement("target");
+                $matchTarget->appendChild($targetMrk);
+                
                 $match->appendChild($matchSource);
                 $match->appendChild($matchTarget);
                 $matches->appendChild($match);
@@ -287,7 +293,7 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                     if(strcasecmp($attrib->name,"match-quality")==0){
                         $match->setAttribute("matchSuitability", $attrib->value);
                     }
-                    else $match->setAttribute(is_null($attrib->prefix)?$attrib->name:"{$attrib->prefix}:{$attrib->name}", $attrib->value );
+                    else $match->setAttribute(empty ($attrib->prefix)?$attrib->name:"{$attrib->prefix}:{$attrib->name}", $attrib->value );
                 }
                
             }
