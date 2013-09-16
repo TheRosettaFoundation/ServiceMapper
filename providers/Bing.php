@@ -204,6 +204,7 @@ class Bing extends \SoapClient implements \IProvider {
 
                 if($segments = $doc->getElementsByTagName("segment")) {
                     $segCount= 0;
+                    $matchId = 0;
                     foreach($segments as $segment ){  
                         $idVal = $segment->getAttribute("id");
 //                        if(!$segment->hasAttribute("id")){ 
@@ -232,6 +233,7 @@ class Bing extends \SoapClient implements \IProvider {
                             }
                  
                             $match = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
+                            $match->setAttribute("id", "bing_".$matchId++);
                             $match->setAttribute("its:provenanceRecordsRef", "#pr$i");
                             $matchSource= $doc->createElement("source");
                             $matchSource->setAttribute("xml:lang", $source);

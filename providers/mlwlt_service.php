@@ -48,7 +48,7 @@ require_once __DIR__.'/../IProvider.php';
  */
 class mlwlt_service extends \SoapClient implements \IProvider {
      public function isEnabled(){
-        return true;
+        return false;
     }
 
     private static $classmap = array(
@@ -228,6 +228,7 @@ class mlwlt_service extends \SoapClient implements \IProvider {
             $altTrans = $xPath->query("//*[local-name()='alt-trans']");
 //            $matches = $doc->getElementsByTagName("match");
             $prefix = $doc->lookupPrefix(\IProvider::XMLNS_MTC);    
+            $matchId = 0;
             foreach($altTrans as $altTran) {
                 $currentSeg = $map[$altTran->getAttribute("mid")];
                 $idVal = $currentSeg->getAttribute("id");
@@ -259,6 +260,7 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                     
                 
                 $match = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
+                $match->setAttribute("id", "mlwlt_".$matchId++);
                 $sourceMrk = $doc->createElement("mrk", $segmentSourceValue);
                 $sourceMrk->setAttribute("ref", "#".$idVal);
                 $sourceMrk->setAttribute("type", "match");

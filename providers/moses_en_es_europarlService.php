@@ -125,7 +125,7 @@ class getResultsInfoRequest {
 class moses_en_es_europarlService extends \SoapClient implements \IProvider{
 
      public function isEnabled(){
-        return false;
+        return true;
     }
     
     
@@ -461,7 +461,7 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
             
     private function translateXLIFFFile2(&$doc, $Filetext,$source=null,$target=null)
     {
-        
+        $prefix = $doc->lookupPrefix(\IProvider::XMLNS_MTC); 
         if($units = $doc->getElementsByTagName("unit")) {
 
             foreach($units as $unit) {
@@ -494,8 +494,9 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
                     $fileElement->insertBefore($doc->importNode($pRecs,true), $placeholder);
                  }
 //                $fileElement->appendChild($pRecs);
-
+                $matchId = 0;
                 if($segments = $doc->getElementsByTagName("segment")) {
+                    
                     foreach($segments as $segment ){  
                         $sourceElement = simplexml_import_dom($segment->getElementsByTagName("source")->item(0));
                         $segmentText = $sourceElement->asXML();
@@ -509,8 +510,9 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
                         $translateSegment = ($segment->hasAttribute("translate") && $segment->getAttribute("translate")=="yes") || (!$segment->hasAttribute("translate")||$translateUnit);
                         if($translateSegment) {
                             
-                            $matches = $doc->createElement("matches");
-                            $match = $doc->createElement("match");
+                            $matches = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
+                            $match = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
+                            $match->setAttribute("id", "moses_".$matchId++);
                             $match->setAttribute("its:provenanceRecordsRef", "#pr$i");
                             $matchSource= $doc->createElement("source");
                             $matchSource->setAttribute("xml:lang", $source);
