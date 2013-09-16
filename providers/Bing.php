@@ -4,6 +4,7 @@ mb_internal_encoding('UTF-8');
 
 error_reporting(E_ALL^ E_WARNING);
 require_once __DIR__.'/../IProvider.php';
+require_once __DIR__.'/../ProviderHelper.php';
 //require_once '../IProvider.php';
 
 class Bing extends \SoapClient implements \IProvider {
@@ -13,7 +14,7 @@ class Bing extends \SoapClient implements \IProvider {
     }
 
     public function isEnabled(){
-        return false;
+        return true;
     }
     public function getSourceLanguages() {
         return array("ar","fi","it","ru","bg","fr","jp","sk","ca","de","ko","sl",
@@ -202,7 +203,8 @@ class Bing extends \SoapClient implements \IProvider {
                     $fileElement->insertBefore($doc->importNode($pRecs,true), $placeholder);
                  }
 
-                if($segments = $doc->getElementsByTagName("segment")) {
+                if($segments = $unit->getElementsByTagName("segment")) {
+               
                     $segCount= 0;
                     $matchId = 0;
                     foreach($segments as $segment ){  
@@ -222,27 +224,35 @@ class Bing extends \SoapClient implements \IProvider {
                             }
                         $translateSegment = ($segment->hasAttribute("translate") && $segment->getAttribute("translate")=="yes") || (!$segment->hasAttribute("translate")||$translateUnit);
                         if($translateSegment) {
-                            $matches = null;
-                            $unitElement = $doc->getElementsByTagName("unit")->item(0);
+                            $matches = $segment->parentNode->getElementsByTagName("matches")->item(0);
+                            $prefix = $doc->lookupPrefix(\IProvider::XMLNS_MTC) ;
                             
-                            $prefix = $doc->lookupPrefix(\IProvider::XMLNS_MTC);     
-                            if($doc->getElementsByTagName("matches")->length == 0) {
+                            if(is_null($matches)){
+                              
                                 $matches = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
-                            } else {
-                                $matches = $unit->getElementsByTagName("matches")->item(0);
+                                $placesholder= $segments->item($segments->length-1);
+                                \ProviderHelper::insertNode($matches, $placesholder, \ProviderHelper::INSERT_AFTER);
                             }
-                 
+                            
+                            
+                          
+                            $matchelementID = "bing_".$matchId++;
                             $match = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
-                            $match->setAttribute("id", "bing_".$matchId++);
+                            $match->setAttribute("id",$matchelementID );
                             $match->setAttribute("its:provenanceRecordsRef", "#pr$i");
                             $matchSource= $doc->createElement("source");
                             $matchSource->setAttribute("xml:lang", $source);
-                            $idMRK = $doc->createElement("mrk");
-                            $idMRK->appendChild(new \DOMText($segmentText));
-                            $idMRK->setAttribute("ref", "#".$idVal);
-                            $idMRK->setAttribute("type", "match");
-                            $matchSource->appendChild($idMRK);
+//                            $idMRK = $doc->createElement("mrk");
+//                            $idMRK->appendChild(new \DOMText($segmentText));
+//                            $idMRK->setAttribute("ref", "#".$idVal);
+//                            $idMRK->setAttribute("type", "match");
+                            $matchSource->appendChild(new \DOMText($segmentText));
+                            
+                            //$segmentSource->setAttribute("ref", $match->getAttribute("id"));
                             $match->appendChild($matchSource);
+                            
+                            
+                            
                             
                             
                             //$translation = $this->translate($source, $target, $segmentText);
@@ -256,7 +266,33 @@ class Bing extends \SoapClient implements \IProvider {
                             
                             $matches->appendChild($match);
                             //$segment->appendChild($matches); 
-                            $unitElement->appendChild($matches);
+                         
+                            
+                            $segmentSource = $segment->getElementsByTagName("source")->item(0);
+                            
+                            $mrk=$doc->createElement("mrk");
+
+                            $children =$segmentSource->childNodes;
+                            $placeholder = null;
+                            for($i=$children->length-1;$i>=0;$i-- ) {
+
+                                $current=$children->item($i);
+                                $mrk->insertBefore($current,$placeholder);
+                                $placeholder=$current;
+                            }
+
+                            $segmentSource->appendChild($mrk);        
+                            $id=null;
+                            $mrkId =0;
+                            $unitID = $segment->parentNode->getAttribute("id");
+                            $xpath = new \DOMXPath($doc);
+                            do{
+                                $id="mrkID_".$mrkId++;      
+                            }
+                            while ($xpath->query("//unit[@id='$unitID' and ./segment[@id='$idVal']//mrk[@id='$id']]")->length>0);
+                            $mrk->setAttribute("id", $id);
+                            $mrk->setAttribute("ref","#".$matchelementID);
+                            $segmentSource->appendChild($mrk);
 
                             
                             $temp = new \DOMDocument();
@@ -282,11 +318,11 @@ class Bing extends \SoapClient implements \IProvider {
                             $count++;
                             $finalTarget= $doc->createElement("target");
                             $finalTarget->setAttribute("xml:lang", $target);
-                            $idMRK = $doc->createElement("mrk");
-                            $idMRK->appendChild(new \DOMText($translation));
-                            $idMRK->setAttribute("ref", "#".$idVal);
-                            $idMRK->setAttribute("type", "match");
-                            $finalTarget->appendChild($idMRK);
+//                            $idMRK = $doc->createElement("mrk");
+//                            $idMRK->appendChild(new \DOMText($translation));
+//                            $idMRK->setAttribute("ref", "#".$idVal);
+//                            $idMRK->setAttribute("type", "match");
+                            $finalTarget->appendChild(new \DOMText($translation));
                             $match->appendChild($finalTarget);
                             $match->removeChild($matchTarget);
                         }

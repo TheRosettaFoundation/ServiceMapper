@@ -211,19 +211,34 @@ class ProviderHelper {
         $file2 = new DOMDocument();
         $file2->loadXML($fileText2);
         $xPath2 = new \DOMXPath($file2);
-        $segments = $file->getElementsByTagName("unit"); 
-        $segments2 = $file2->getElementsByTagName("unit"); 
+        $units = $file->getElementsByTagName("unit"); 
+        $units2 = $file2->getElementsByTagName("unit");
+        
 //        if($matches2 = $xPath2->query("//*[local-name()='matches']")){
-            for($i=0; $i < $segments2->length; $i++) {
+            for($i=0; $i < $units2->length; $i++) {
 
-                $segment = $segments->item($i);
-                $segment2 = $segments2->item($i);
+                $unit = $units->item($i);
+                $unit2 = $units2->item($i);
+                
+//                $actualSegments = $unit->getElementsByTagName("segment");
+//                $actualSegments2 = $unit2->getElementsByTagName("segment");
+//                
+//                for($i=0; $i < $actualSegments2->length; $i++) {
+//                    $actualSegments->item($i)->getElementsByTagName("source")->item(0)->setAttribute("ref", "#".$actualSegments2->item($i)->getElementsByTagName("source")->item(0)->getAttribute("ref"));
+//                }
+                
+                //$newSegSource = $file->importNode($segmentSource2, true);
+                //$segment->replaceChild($newSegSource, $segmentSource);                
 
 //                $matches = $xPath->query("//*[local-name()='matches']");
 //                $matchPrefix = $file->lookupPrefix("urn:oasis:names:tc:xliff:matches:2.0");
                 
+               
+                
                 $prefix = $file->lookupPrefix(\IProvider::XMLNS_MTC);
-                $matches = $segment->getElementsByTagName("matches")->item(0);
+                $matches = $unit->getElementsByTagName("matches")->item(0);
+                
+                
                 
                 //$matches = $segment->getElementsByTagName("matches")->item(0);
 //                if($matches===false||$matches->length===0){
@@ -238,16 +253,59 @@ class ProviderHelper {
                 if(is_null($matches)){
                     $prefix = $file->lookupPrefix(\IProvider::XMLNS_MTC) ;
                     $matches = $file->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
-                    $placesholder = $segment->getElementsByTagName("segment");
+                    $placesholder = $unit->getElementsByTagName("segment");
                     $placesholder= $placesholder->item($placesholder->length-1);
                     ProviderHelper::insertNode($matches, $placesholder, ProviderHelper::INSERT_AFTER);
                 }
 
-                $matchElements = $segment2->getElementsByTagName("match");
+                $matchElements = $unit2->getElementsByTagName("match");
                 //$matchElements = $segment2->getElementsByTagName("match");
 //                $matchElements = $xPath2->query("//*[local-name()='match']",$match2);
 //                if($matchElements && $matchElements->length>0){
-                    foreach($matchElements as $matchElement){
+                    $unitId = $unit->getAttribute("id");
+                        $mrkId =0;
+                    foreach($matchElements as $matchElement){                        
+                        $matchID = $matchElement->getAttribute("id");
+                        
+                        
+                        $matchSeg=$xPath2->query("//unit[@id='$unitId']/segment[.//mrk[@ref='#$matchID']]")->item(0);
+                        $originalSeg= $xPath->query($matchSeg->getNodePath())->item(0);
+                     
+                        $temp= 0;
+                        while($xPath->query("//unit[@id='$unitId']/*[local-name()='matches']/*[local-name()='match' and @id='$matchID']")->length>0){
+                            $matchID.=$temp++;  
+                        }
+                        $matchElement->setAttribute("id",$matchID);
+                
+                        
+                        $segmentSource = $originalSeg->getElementsByTagName("source")->item(0);
+                            
+                        $mrk=$file->createElement("mrk");
+
+                        $children =$segmentSource->childNodes;
+                        $placeholder = null;
+                        for($j=$children->length-1;$j>=0;$j-- ) {
+
+                            $current=$children->item($j);
+                            $mrk->insertBefore($current,$placeholder);
+                            $placeholder=$current;
+                        }
+
+                        $segmentSource->appendChild($mrk);        
+                        $id=null;
+                    
+
+
+                        do{
+                            $id="mrkID_".$mrkId++;      
+                        }
+                        while ($xPath->query($originalSeg->getNodePath()."//mrk[@id='$id']]")->length>0);
+                        $mrk->setAttribute("id", $id);
+                        $mrk->setAttribute("ref","#".$matchID);
+                        $segmentSource->appendChild($mrk);
+                        
+                        
+                        
                         $copyMatchElement =$file->importNode($matchElement,true);
                         $matches->appendChild($copyMatchElement);
                     }

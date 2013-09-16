@@ -22,7 +22,7 @@
     </mda:metadata>
     <unit id="unit_1" translate="yes">
       <segment>
-        <source xml:lang="en-us"><mrk mtype="x-its" its:terminology="yes" its:termInfoRef="#ge4">ITS, XLIFF and PROV Example</mrk></source>
+        <source xml:lang="en-us"><mrk id="m_1" mtype="x-its" its:terminology="yes" its:termInfoRef="#ge4">ITS, XLIFF and PROV Example</mrk></source>
       </segment>
       <segment canResegment="no">
         <source xml:lang="en-us">
@@ -32,11 +32,11 @@
       </segment>
       <segment canResegment="yes" >
         <source xml:lang="en-us">
-                    From the canyons of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Arizona"><mrk its:terminology="yes" its:termInfoRef="#ge1">Arizona</mrk></mrk>, to the Khmer temples deep in the 
-                    jungle; from the tropical beaches of Queensland to the glaciers of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Antarctica"><mrk its:terminology="yes" its:termInfoRef="#ge2">Antarctica</mrk></mrk>; or from 
-                    the wild savanna of <mrk its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Africa"><mrk its:terminology="yes" its:termInfoRef="#ge3">Africa</mrk></mrk>
+                    From the canyons of <mrk id="m_1" its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Arizona"><mrk id="m_2" its:terminology="yes" its:termInfoRef="#ge1">Arizona</mrk></mrk>, to the Khmer temples deep in the 
+                    jungle; from the tropical beaches of Queensland to the glaciers of <mrk id="m_3" its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Antarctica"><mrk id="m_4" its:terminology="yes" its:termInfoRef="#ge2">Antarctica</mrk></mrk>; or from 
+                    the wild savanna of <mrk id="m_5" its:taConfidence="0.7" its:taClassRef="http://nerd.eurecom.fr/ontology#Place" its:taIdentRef="http://dbpedia.org/resource/Africa"><mrk id="m_6" its:terminology="yes" its:termInfoRef="#ge3">Africa</mrk></mrk>
                     to mysterious castles in the forests of
-                    <mrk mtype="x-its" its:terminology="yes" its:termInfoRef="#ge4">Bohemia</mrk>,
+                    <mrk id="m_7" mtype="x-its" its:terminology="yes" its:termInfoRef="#ge4">Bohemia</mrk>,
                     our offer takes you in some of the most amazing places on our planet.
                     In 80 days, you will see more of the world than most
                     see through their entire lifetime!

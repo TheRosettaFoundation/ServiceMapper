@@ -7,7 +7,7 @@
             </its:provenanceRecords>
         </header>
         <body>
-            <trans-unit id="TU0">
+            <trans-unit id="TU0" itsx:domains="it">
                 <source xml:lang="en-us">
                     <mrk mid="MRK0" mtype="seg">ITS, XLIFF and PROV Example</mrk>
                     <mrk mid="MRK1" mtype="seg">

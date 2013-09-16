@@ -24,36 +24,36 @@ class XLIFF {
         $segCount= 0;
         $mrkId=0;
         $xpath = new DOMXPath($doc);
-        foreach($doc->getElementsByTagName("segment") as $segment ){  
+        foreach($doc->getElementsByTagName("segment") as $segment ){              
             if(!$segment->hasAttribute("id")){ 
                 $idVal="segID_".$segCount++;
                 $segment->setAttribute("id", $idVal);
             }
-            if(!$segment->hasAttribute("canResegment") || strtolower($segment->getAttribute("canResegment"))=="yes")
-            {
-                $source = $segment->getElementsByTagName("source")->item(0);
-                $mrk=$doc->createElement("mrk");
-               
-                $children =$source->childNodes;
-                $placeholder = null;
-                for($i=$children->length-1;$i>=0;$i-- ) {
-                    
-                    $current=$children->item($i);
-                    $mrk->insertBefore($current,$placeholder);
-                    $placeholder=$current;
-                }
-                
-                $source->appendChild($mrk);        
-                $id=null;
-               
-                $unitID = $segment->parentNode->getAttribute("id");
-                do{
-                    $id="mrkID_".$mrkId++;      
-                }
-                while ($xpath->query("//unit[@id='$unitID' and ./segment[@id='$idVal']//mrk[@id='$id']]")->length>0);
-                $mrk->setAttribute("id", $id);
-                $source->appendChild($mrk);
-            }
+//            if(!$segment->hasAttribute("canResegment") || strtolower($segment->getAttribute("canResegment"))=="yes")
+//            {
+//                $source = $segment->getElementsByTagName("source")->item(0);
+//                $mrk=$doc->createElement("mrk");
+//               
+//                $children =$source->childNodes;
+//                $placeholder = null;
+//                for($i=$children->length-1;$i>=0;$i-- ) {
+//                    
+//                    $current=$children->item($i);
+//                    $mrk->insertBefore($current,$placeholder);
+//                    $placeholder=$current;
+//                }
+//                
+//                $source->appendChild($mrk);        
+//                $id=null;
+//               
+//                $unitID = $segment->parentNode->getAttribute("id");
+//                do{
+//                    $id="mrkID_".$mrkId++;      
+//                }
+//                while ($xpath->query("//unit[@id='$unitID' and ./segment[@id='$idVal']//mrk[@id='$id']]")->length>0);
+//                $mrk->setAttribute("id", $id);
+//                $source->appendChild($mrk);
+//            }
         }
         $xliff = htmlspecialchars_decode($doc->saveXML());
         
