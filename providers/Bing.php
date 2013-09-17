@@ -14,7 +14,7 @@ class Bing extends \SoapClient implements \IProvider {
     }
 
     public function isEnabled(){
-        return true;
+        return false;
     }
     public function getSourceLanguages() {
         return array("ar","fi","it","ru","bg","fr","jp","sk","ca","de","ko","sl",

@@ -498,6 +498,7 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
                 if($segments = $doc->getElementsByTagName("segment")) {
                     
                     foreach($segments as $segment ){  
+                        $idVal = $segment->getAttribute("id");
                         $sourceElement = simplexml_import_dom($segment->getElementsByTagName("source")->item(0));
                         $segmentText = $sourceElement->asXML();
                          $pos = strpos($segmentText, "<".$sourceElement->getName());
@@ -510,14 +511,24 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
                         $translateSegment = ($segment->hasAttribute("translate") && $segment->getAttribute("translate")=="yes") || (!$segment->hasAttribute("translate")||$translateUnit);
                         if($translateSegment) {
                             
-                            $matches = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
+                            $matches = $segment->parentNode->getElementsByTagName("matches")->item(0);
+                            $prefix = $doc->lookupPrefix(\IProvider::XMLNS_MTC) ;
+                            
+                            if(is_null($matches)){
+                              
+                                $matches = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
+                                $placesholder= $segments->item($segments->length-1);
+                                \ProviderHelper::insertNode($matches, $placesholder, \ProviderHelper::INSERT_AFTER);
+                            } 
+                            
+                            $matchelementID = "moses_".$matchId++;
                             $match = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
-                            $match->setAttribute("id", "moses_".$matchId++);
+                            $match->setAttribute("id",$matchelementID );
                             $match->setAttribute("its:provenanceRecordsRef", "#pr$i");
                             $matchSource= $doc->createElement("source");
                             $matchSource->setAttribute("xml:lang", $source);
                             $matchSource->appendChild(new \DOMText($segmentText));
-                            $match->appendChild($matchSource);
+                            $match->appendChild($matchSource);                            
                             
                                                         
                             //$translation = $this->translate($source, $target, $segmentText);
@@ -530,7 +541,33 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
                             $match->appendChild($matchTarget);
                             
                             $matches->appendChild($match);
-                            $segment->appendChild($matches);                            
+                            
+                            
+                            $segmentSource = $segment->getElementsByTagName("source")->item(0);
+                            
+                            $mrk=$doc->createElement("mrk");
+
+                            $children =$segmentSource->childNodes;
+                            $placeholder = null;
+                            for($i=$children->length-1;$i>=0;$i-- ) {
+
+                                $current=$children->item($i);
+                                $mrk->insertBefore($current,$placeholder);
+                                $placeholder=$current;
+                            }
+
+                            $segmentSource->appendChild($mrk);        
+                            $id=null;
+                            $mrkId =0;
+                            $unitID = $segment->parentNode->getAttribute("id");
+                            $xpath = new \DOMXPath($doc);
+                            do{
+                                $id="mrkID_".$mrkId++;      
+                            }
+                            while ($xpath->query("//unit[@id='$unitID' and ./segment[@id='$idVal']//mrk[@id='$id']]")->length>0);
+                            $mrk->setAttribute("id", $id);
+                            $mrk->setAttribute("ref","#".$matchelementID);
+                            $segmentSource->appendChild($mrk);                             
                             
                             $temp = new \DOMDocument();
                             $saved = htmlspecialchars_decode($doc->saveXML());
