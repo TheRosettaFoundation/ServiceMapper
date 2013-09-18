@@ -202,9 +202,9 @@ class mlwlt_service extends \SoapClient implements \IProvider {
 
             $data = new mlwlt_xliff_mt_prepare();
             $data->xliff_input = base64_encode($xliff1xText);
-            //$result = $this->mlwlt_xliff_mt_prepare($data);
-            //$xliff1xText =  base64_decode($result->mlwlt_xliff_mt_prepareResult);            
-            $xliff1xText = file_get_contents(__DIR__."/../test/xliff12.xlf"); // fake translation
+            $result = $this->mlwlt_xliff_mt_prepare($data);
+            $xliff1xText =  base64_decode($result->mlwlt_xliff_mt_prepareResult);            
+            //$xliff1xText = file_get_contents(__DIR__."/../test/xliff12.xlf"); // fake translation
            
             $doc2 = new \DOMDocument();
             $doc2->loadXML($xliff1xText);
