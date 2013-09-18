@@ -125,7 +125,7 @@ class getResultsInfoRequest {
 class moses_en_es_europarlService extends \SoapClient implements \IProvider{
 
      public function isEnabled(){
-        return false;
+        return true;
     }
     
     

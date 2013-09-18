@@ -48,7 +48,7 @@ require_once __DIR__.'/../IProvider.php';
  */
 class mlwlt_service extends \SoapClient implements \IProvider {
      public function isEnabled(){
-        return false;
+        return true;
     }
 
     private static $classmap = array(
