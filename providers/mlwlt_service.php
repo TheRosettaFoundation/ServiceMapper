@@ -223,7 +223,8 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                         $placeholder = $f->getElementsByTagName("unit")->item(0);
                     }
                     //$f->insertBefore($xliff2x->importNode($pRec,true), $placeholder);
-                    \ProviderHelper::insertNode($xliff2x->importNode($pRec,true), $placeholder, \ProviderHelper::INSERT_END);
+                    //\ProviderHelper::insertNode($xliff2x->importNode($pRec,true), $placeholder, \ProviderHelper::INSERT_END);
+                    $f->appendChild($xliff2x->importNode($pRec,true));
                     
                 }
             }
@@ -255,50 +256,50 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                             }
                         $translateSegment = ($segment->hasAttribute("translate") && $segment->getAttribute("translate")=="yes") || (!$segment->hasAttribute("translate")||$translateUnit);
                         if($translateSegment) {
-                            $matches = $segment->parentNode->getElementsByTagName("matches")->item(0);
-                            $prefix = $xliff2x->lookupPrefix(\IProvider::XMLNS_MTC) ;
-                            
-                            if(is_null($matches)){
-                              
-                                $matches = $xliff2x->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
-                                $placesholder= $segments->item($segments->length-1);
-                                \ProviderHelper::insertNode($matches, $placesholder, \ProviderHelper::INSERT_AFTER);
-                            }
-                            
-                            
-
-                            $matchelementID = "mosesmt_".$matchId++;
-                            $match = $xliff2x->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
-                            $match->setAttribute("id",$matchelementID );
-                            $match->setAttribute("its:provenanceRecordsRef", "#$mlwltProvRecId");
-                            $matchSource= $xliff2x->createElement("source");
-                            $matchSource->setAttribute("xml:lang", $source);
-//                            $idMRK = $doc->createElement("mrk");
-//                            $idMRK->appendChild(new \DOMText($segmentText));
-//                            $idMRK->setAttribute("ref", "#".$idVal);
-//                            $idMRK->setAttribute("type", "match");
-                            $matchSource->appendChild(new \DOMText($segmentText));
-                            
-                            //$segmentSource->setAttribute("ref", $match->getAttribute("id"));
-                            $match->appendChild($matchSource);
-                            
-                            
-                            
-                            
-                            
-                            $translation = $this->translate($source, $target, $segmentText);
-                            //$translation = $segmentText; // fake translation
-                            
-                            
-                            $matchTarget= $xliff2x->createElement("target");
-                            $matchTarget->setAttribute("xml:lang", $target);
-                            $matchTarget->appendChild(new \DOMText($translation));
-                            $match->appendChild($matchTarget);
-                            
-                            $matches->appendChild($match);
-                            //$segment->appendChild($matches); 
-                         
-                            
+//                            $matches = $segment->parentNode->getElementsByTagName("matches")->item(0);
+//                            $prefix = $xliff2x->lookupPrefix(\IProvider::XMLNS_MTC) ;
+//                            
+//                            if(is_null($matches)){
+//                              
+//                                $matches = $xliff2x->createElementNS(\IProvider::XMLNS_MTC, "$prefix:matches");
+//                                $placesholder= $segments->item($segments->length-1);
+//                                \ProviderHelper::insertNode($matches, $placesholder, \ProviderHelper::INSERT_AFTER);
+//                            }
+//                            
+//                            
+//
+                            $matchelementID = "mlwlt_".$matchId++;
+//                            $match = $xliff2x->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
+//                            $match->setAttribute("id",$matchelementID );
+//                            $match->setAttribute("its:provenanceRecordsRef", "#$mlwltProvRecId");
+//                            $matchSource= $xliff2x->createElement("source");
+//                            $matchSource->setAttribute("xml:lang", $source);
+////                            $idMRK = $doc->createElement("mrk");
+////                            $idMRK->appendChild(new \DOMText($segmentText));
+////                            $idMRK->setAttribute("ref", "#".$idVal);
+////                            $idMRK->setAttribute("type", "match");
+//                            $matchSource->appendChild(new \DOMText($segmentText));
+//                            
+//                            //$segmentSource->setAttribute("ref", $match->getAttribute("id"));
+//                            $match->appendChild($matchSource);
+//                            
+//                            
+//                            
+//                            
+//                            
+//                            //$translation = $this->translate($source, $target, $segmentText);
+//                            $translation = $segmentText; // fake translation
+//                            
+//                            
+//                            $matchTarget= $xliff2x->createElement("target");
+//                            $matchTarget->setAttribute("xml:lang", $target);
+//                            $matchTarget->appendChild(new \DOMText($translation));
+//                            $match->appendChild($matchTarget);
+//                            
+//                            $matches->appendChild($match);
+//                            //$segment->appendChild($matches); 
+//                         
+//                            
                             $segmentSource = $segment->getElementsByTagName("source")->item(0);
                             
                             $mrk=$xliff2x->createElement("mrk");
@@ -324,45 +325,45 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                             $mrk->setAttribute("id", $id);
                             $mrk->setAttribute("ref","#".$matchelementID);
                             $segmentSource->appendChild($mrk);
-
-                            
-                            $temp = new \DOMDocument();
-                            $saved = htmlspecialchars_decode($xliff2x->saveXML());
-
-                            $currentid = $unit->getAttribute("id");
-                            $temp->loadXML($saved);
-                            $domXPath = new \DOMXPath($temp);
-                            $sourceMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='source']//*[local-name()='mrk' and (@its:terminology='yes' or @translate='no')]");
-                            $targetMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='target']//*[local-name()='mrk' and (@its:terminology='yes' or @translate='no')]");
-                            for($i=0; $i < $sourceMrks->length; $i++) {
-    //                       
-                              $translation= str_replace($temp->saveXML($targetMrks->item($i)), $temp->saveXML($sourceMrks->item($i)),$translation);
-
-                            }
-                            $sourceMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='source']//*[local-name()='mrk' and not(@its:terminology='yes' or @translate='no')]");
-                            $targetMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='target']//*[local-name()='mrk' and not(@its:terminology='yes' or @translate='no')]");
-                            for($i=0; $i < $sourceMrks->length; $i++) {
-    //                       
-                              $translation= str_replace($temp->saveXML($sourceMrks->item($i)), $temp->saveXML($targetMrks->item($i)),$translation);
-
-                            }
-                            $count++;
-                            $finalTarget= $xliff2x->createElement("target");
-                            $finalTarget->setAttribute("xml:lang", $target);
-//                            $idMRK = $doc->createElement("mrk");
-//                            $idMRK->appendChild(new \DOMText($translation));
-//                            $idMRK->setAttribute("ref", "#".$idVal);
-//                            $idMRK->setAttribute("type", "match");
-                            $finalTarget->appendChild(new \DOMText($translation));
-                            $match->appendChild($finalTarget);
-                            $match->removeChild($matchTarget);
+//
+//                            
+//                            $temp = new \DOMDocument();
+//                            $saved = htmlspecialchars_decode($xliff2x->saveXML());
+//
+//                            $currentid = $unit->getAttribute("id");
+//                            $temp->loadXML($saved);
+//                            $domXPath = new \DOMXPath($temp);
+//                            $sourceMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='source']//*[local-name()='mrk' and (@its:terminology='yes' or @translate='no')]");
+//                            $targetMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='target']//*[local-name()='mrk' and (@its:terminology='yes' or @translate='no')]");
+//                            for($i=0; $i < $sourceMrks->length; $i++) {
+//    //                       
+//                              $translation= str_replace($temp->saveXML($targetMrks->item($i)), $temp->saveXML($sourceMrks->item($i)),$translation);
+//
+//                            }
+//                            $sourceMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='source']//*[local-name()='mrk' and not(@its:terminology='yes' or @translate='no')]");
+//                            $targetMrks = $domXPath->query("//*[local-name()='unit' and @id='$currentid']/*[local-name()='segment']//*[local-name()='match' and @id='Solas_bing{$count}' ]/*[local-name()='target']//*[local-name()='mrk' and not(@its:terminology='yes' or @translate='no')]");
+//                            for($i=0; $i < $sourceMrks->length; $i++) {
+//    //                       
+//                              $translation= str_replace($temp->saveXML($sourceMrks->item($i)), $temp->saveXML($targetMrks->item($i)),$translation);
+//
+//                            }
+//                            $count++;
+//                            $finalTarget= $xliff2x->createElement("target");
+//                            $finalTarget->setAttribute("xml:lang", $target);
+////                            $idMRK = $doc->createElement("mrk");
+////                            $idMRK->appendChild(new \DOMText($translation));
+////                            $idMRK->setAttribute("ref", "#".$idVal);
+////                            $idMRK->setAttribute("type", "match");
+//                            $finalTarget->appendChild(new \DOMText($translation));
+//                            $match->appendChild($finalTarget);
+//                            $match->removeChild($matchTarget);
                         }
                     }
                 } 
             }
             
 
-            /*
+            
             $doc2->loadXML($xliff1xText);
             $xPath = new \DOMXPath($doc2);
             $altTrans = $xPath->query("//*[local-name()='alt-trans']");
@@ -441,7 +442,7 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                 }
                
             }
-            */
+            
         }
 
         return $xliff2x->saveXML(); 
