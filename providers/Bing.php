@@ -107,8 +107,8 @@ class Bing extends \SoapClient implements \IProvider {
                         }
 
      
-                        $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
-                        //$translation = $text; // un comment for fake translation
+                        //$translation = $this->translate($sourceLanguage,$targetLanguage,$text);
+                        $translation = $text; // un comment for fake translation
                         
                         
                         $alt_trans = $doc->createElement("alt-trans");
@@ -255,8 +255,8 @@ class Bing extends \SoapClient implements \IProvider {
                             
                             
                             
-                            $translation = $this->translate($source, $target, $segmentText);
-                            //$translation = $segmentText; // fake translation
+                            //$translation = $this->translate($source, $target, $segmentText);
+                            $translation = $segmentText; // fake translation
                             
                             
                             $matchTarget= $doc->createElement("target");

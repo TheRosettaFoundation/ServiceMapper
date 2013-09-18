@@ -48,7 +48,7 @@ require_once __DIR__.'/../IProvider.php';
  */
 class mlwlt_service extends \SoapClient implements \IProvider {
      public function isEnabled(){
-        return true;
+        return false;
     }
 
     private static $classmap = array(
@@ -404,15 +404,14 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                 
                 $match = $xliff2x->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
                 $match->setAttribute("id", "mlwlt_".$matchId++);
-                $sourceMrk = $xliff2x->createElement("mrk", $segmentSourceValue);
-                $sourceMrk->setAttribute("ref", "#".$idVal);
-                $sourceMrk->setAttribute("type", "match");
+//                $sourceMrk = $xliff2x->createElement("mrk", $segmentSourceValue);
+//                $sourceMrk->setAttribute("ref", "#".$idVal);
+//                $sourceMrk->setAttribute("type", "match");
                 
-                $matchSource = $xliff2x->createElement("source");
+                $matchSource = $xliff2x->createElement("source",$segmentSourceValue);
                 $matchSource->setAttribute("xml:lang", $sourceLang); 
-                $matchSource->appendChild($sourceMrk);
-                
-                $segmentSourceValue =  strip_tags($doc2->saveXML($altTarget));
+//                $matchSource->appendChild($sourceMrk);
+                $segmentTargetValue =  strip_tags($doc2->saveXML($altTarget));
 //                  $segmentSourceValue =  $doc2->saveXML($altTarget);
 //                    $pos = strpos($segmentSourceValue, "<target");
 //                    if($pos ===0){
@@ -421,11 +420,11 @@ class mlwlt_service extends \SoapClient implements \IProvider {
 //                        $pos = strrpos($segmentSourceValue, "</target>");
 //                        $segmentSourceValue= substr_replace($segmentSourceValue,"",$pos);
 //                    }
-                $targetMrk = $xliff2x->createElement("mrk", $segmentSourceValue);
-                $targetMrk->setAttribute("ref", "#".$idVal);
-                $targetMrk->setAttribute("type", "match");
-                $matchTarget = $xliff2x->createElement("target");
-                $matchTarget->appendChild($targetMrk);
+//                $targetMrk = $xliff2x->createElement("mrk", $segmentSourceValue);
+//                $targetMrk->setAttribute("ref", "#".$idVal);
+//                $targetMrk->setAttribute("type", "match");
+                $matchTarget = $xliff2x->createElement("target",$segmentTargetValue);
+//                $matchTarget->appendChild($targetMrk);
                 
                 $match->appendChild($matchSource);
                 $match->appendChild($matchTarget);
