@@ -13,7 +13,8 @@ require_once __DIR__.'/IProvider.php';
  * @author sean
  */
 class ProviderHelper {
-    
+
+    static $mrkId = 0;
     const INSERT_END = 0;
     const INSERT_BEFORE = 1;
     const INSERT_AFTER = 2;
@@ -215,6 +216,7 @@ class ProviderHelper {
         $units2 = $file2->getElementsByTagName("unit");
         
 //        if($matches2 = $xPath2->query("//*[local-name()='matches']")){
+            //$mrkId = 0;
             for($i=0; $i < $units2->length; $i++) {
 
                 $unit = $units->item($i);
@@ -263,7 +265,7 @@ class ProviderHelper {
 //                $matchElements = $xPath2->query("//*[local-name()='match']",$match2);
 //                if($matchElements && $matchElements->length>0){
                     $unitId = $unit->getAttribute("id");
-                        $mrkId =0;
+                        
                     foreach($matchElements as $matchElement){                        
                         $matchID = $matchElement->getAttribute("id");
                         
@@ -291,15 +293,15 @@ class ProviderHelper {
                             $placeholder=$current;
                         }
 
-                        $segmentSource->appendChild($mrk);        
+       
                         $id=null;
                     
 
-
+                        
                         do{
-                            $id="mrkID_".$mrkId++;      
+                            $id="mrkID_".self::$mrkId++;      
                         }
-                        while ($xPath->query($originalSeg->getNodePath()."//mrk[@id='$id']]")->length>0);
+                        while ($xPath->query($originalSeg->getNodePath()."//mrk[@id='$id']]")->length > 0);
                         $mrk->setAttribute("id", $id);
                         $mrk->setAttribute("ref","#".$matchID);
                         $segmentSource->appendChild($mrk);

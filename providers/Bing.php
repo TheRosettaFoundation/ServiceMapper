@@ -14,7 +14,7 @@ class Bing extends \SoapClient implements \IProvider {
     }
 
     public function isEnabled(){
-        return false;
+        return true;
     }
     public function getSourceLanguages() {
         return array("ar","fi","it","ru","bg","fr","jp","sk","ca","de","ko","sl",
@@ -52,11 +52,11 @@ class Bing extends \SoapClient implements \IProvider {
                      $current =$pRec->getAttribute("xml:id");
                      $map[$current]=$pRec;
                  }
-                 $i = 1;
-                    while(isset ($map["pr$i"])) $i++;
+                 $k = 1;
+                    while(isset ($map["pr$k"])) $k++;
 //                 unset ($map);
                  $pRecs=$doc->createElement("its:provenanceRecords");
-                 $pRecs->setAttribute("xml:id", "pr$i");
+                 $pRecs->setAttribute("xml:id", "pr$k");
                  $pRec=$doc->createElement("its:provenanceRecord");
                  $pRec->setAttribute("its:tool", "bingtranslate");
                  $pRec->setAttribute("its:orgRef", "http://www.microsoft.com");
@@ -107,14 +107,14 @@ class Bing extends \SoapClient implements \IProvider {
                         }
 
      
-                        //$translation = $this->translate($sourceLanguage,$targetLanguage,$text);
-                        $translation = $text; // un comment for fake translation
+                        $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
+                        //$translation = $text; // un comment for fake translation
                         
                         
                         $alt_trans = $doc->createElement("alt-trans");
                         $alt_trans->setAttribute("origin", "bingtranslate");
                         $alt_trans->setAttribute("its:annotatorsRef", "mtconfidence|http://api.microsofttranslator.com/V2/Http.svc/Translate");
-                        $alt_trans->setAttribute("its:provenanceRecordsRef", "#pr$i");
+                        $alt_trans->setAttribute("its:provenanceRecordsRef", "#pr$k");
                         if(isset($seg['mid']) )  $alt_trans->setAttribute("mid", $seg['mid']);
                           
                         $altSource= $doc->createElement("source");
@@ -184,11 +184,11 @@ class Bing extends \SoapClient implements \IProvider {
                     $current =$pRec->getAttribute("xml:id");
                     $map[$current]=$pRec;
                 }
-                $i = 1;
-                   while(isset ($map["pr$i"])) $i++;
+                $k = 1;
+                   while(isset ($map["pr$k"])) $k++;
             //                 unset ($map);
                 $pRecs=$doc->createElement("its:provenanceRecords");
-                $pRecs->setAttribute("xml:id", "pr$i");
+                $pRecs->setAttribute("xml:id", "pr$k");
                 $pRec=$doc->createElement("its:provenanceRecord");
                 $pRec->setAttribute("its:tool", "bingtranslate");
                 $pRec->setAttribute("its:orgRef", "http://www.microsoft.com");
@@ -239,7 +239,7 @@ class Bing extends \SoapClient implements \IProvider {
                             $matchelementID = "bing_".$matchId++;
                             $match = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
                             $match->setAttribute("id",$matchelementID );
-                            $match->setAttribute("its:provenanceRecordsRef", "#pr$i");
+                            $match->setAttribute("its:provenanceRecordsRef", "#pr$k");
                             $matchSource= $doc->createElement("source");
                             $matchSource->setAttribute("xml:lang", $source);
 //                            $idMRK = $doc->createElement("mrk");

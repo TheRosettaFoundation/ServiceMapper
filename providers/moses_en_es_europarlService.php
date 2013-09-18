@@ -125,7 +125,7 @@ class getResultsInfoRequest {
 class moses_en_es_europarlService extends \SoapClient implements \IProvider{
 
      public function isEnabled(){
-        return false;
+        return true;
     }
     
     
@@ -344,11 +344,11 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
                      $current =$pRec->getAttribute("xml:id");
                      $map[$current]=$pRec;
                  }
-                 $i = 1;
-                    while(isset ($map["pr$i"])) $i++;
+                 $k = 1;
+                    while(isset ($map["pr$k"])) $k++;
 //                 unset ($map);
                  $pRecs=$doc->createElement("its:provenanceRecords");
-                 $pRecs->setAttribute("xml:id", "pr$i");
+                 $pRecs->setAttribute("xml:id", "pr$k");
                  $pRec=$doc->createElement("its:provenanceRecord");
                  $pRec->setAttribute("its:tool", "Panacea");
                  $pRec->setAttribute("its:orgRef", "http://www.cngl.ie/");
@@ -405,7 +405,7 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
                         $alt_trans = $doc->createElement("alt-trans");
                         $alt_trans->setAttribute("origin", "Panacea");
                         //$alt_trans->setAttribute("its:annotatorsRef", "mtconfidence|http://api.microsofttranslator.com/V2/Http.svc/Translate");
-                        $alt_trans->setAttribute("its:provenanceRecordsRef", "#pr$i");                       
+                        $alt_trans->setAttribute("its:provenanceRecordsRef", "#pr$k");                       
                         if(isset($seg['mid']) )  $alt_trans->setAttribute("mid", $seg['mid']);
                           
                         $altSource= $doc->createElement("source");
@@ -475,11 +475,11 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
                     $current =$pRec->getAttribute("xml:id");
                     $map[$current]=$pRec;
                 }
-                $i = 1;
-                   while(isset ($map["pr$i"])) $i++;
+                $k = 1;
+                   while(isset ($map["pr$k"])) $k++;
             //                 unset ($map);
                  $pRecs=$doc->createElement("its:provenanceRecords");
-                 $pRecs->setAttribute("xml:id", "pr$i");
+                 $pRecs->setAttribute("xml:id", "pr$k");
                  $pRec=$doc->createElement("its:provenanceRecord");
                  $pRec->setAttribute("its:tool", "Panacea");
                  $pRec->setAttribute("its:orgRef", "http://www.cngl.ie/");
@@ -521,18 +521,18 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
                                 \ProviderHelper::insertNode($matches, $placesholder, \ProviderHelper::INSERT_AFTER);
                             } 
                             
-                            $matchelementID = "moses_".$matchId++;
+                            $matchelementID = "panacea_".$matchId++;
                             $match = $doc->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
                             $match->setAttribute("id",$matchelementID );
-                            $match->setAttribute("its:provenanceRecordsRef", "#pr$i");
+                            $match->setAttribute("its:provenanceRecordsRef", "#pr$k");
                             $matchSource= $doc->createElement("source");
                             $matchSource->setAttribute("xml:lang", $source);
                             $matchSource->appendChild(new \DOMText($segmentText));
                             $match->appendChild($matchSource);                            
                             
                                                         
-                            //$translation = $this->translate($source, $target, $segmentText);
-                            $translation = $segmentText; //fake translation
+                            $translation = $this->translate($source, $target, $segmentText);
+                            //$translation = $segmentText; //fake translation
                                                         
                             
                             $matchTarget= $doc->createElement("target");

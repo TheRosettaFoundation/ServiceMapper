@@ -228,6 +228,10 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                 }
             }
             
+            $xPathX2 = new \DOMXPath($xliff2x);
+            $mlwltProvRec = $xPathX2->query("//*[local-name()='provenanceRecords']/*[local-name()='provenanceRecord' and @its:tool='mosesmt']");
+            $mlwltProvRecId = $mlwltProvRec->item(0)->parentNode->getAttribute("xml:id");
+            
             $units = $xliff2x->getElementsByTagName("unit");
             foreach($units as $unit) {
                 $count=0;
@@ -263,10 +267,10 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                             
                             
 
-                            $matchelementID = "mlwlt_moravia_".$matchId++;
+                            $matchelementID = "mosesmt_".$matchId++;
                             $match = $xliff2x->createElementNS(\IProvider::XMLNS_MTC, "$prefix:match");
                             $match->setAttribute("id",$matchelementID );
-                            $match->setAttribute("its:provenanceRecordsRef", "#pr$j");
+                            $match->setAttribute("its:provenanceRecordsRef", "#$mlwltProvRecId");
                             $matchSource= $xliff2x->createElement("source");
                             $matchSource->setAttribute("xml:lang", $source);
 //                            $idMRK = $doc->createElement("mrk");
@@ -282,8 +286,8 @@ class mlwlt_service extends \SoapClient implements \IProvider {
                             
                             
                             
-                            //$translation = $this->translate($source, $target, $segmentText);
-                            $translation = $segmentText; // fake translation
+                            $translation = $this->translate($source, $target, $segmentText);
+                            //$translation = $segmentText; // fake translation
                             
                             
                             $matchTarget= $xliff2x->createElement("target");
