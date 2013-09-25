@@ -564,7 +564,7 @@ class moses_en_es_europarlService extends \SoapClient implements \IProvider{
                             do{
                                 $id="mrkID_".$mrkId++;      
                             }
-                            while ($xpath->query("//unit[@id='$unitID' and ./segment[@id='$idVal']//mrk[@id='$id']]")->length>0);
+                            while ($xpath->query("//*[local-name()='unit' and @id='$unitID' and ./segment[@id='$idVal']//*[local-name()='mrk' and @id='$id']]")->length>0);
                             $mrk->setAttribute("id", $id);
                             $mrk->setAttribute("ref","#".$matchelementID);
                             $segmentSource->appendChild($mrk);                             

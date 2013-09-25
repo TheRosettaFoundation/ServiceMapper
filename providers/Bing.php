@@ -14,7 +14,7 @@ class Bing extends \SoapClient implements \IProvider {
     }
 
     public function isEnabled(){
-        return true;
+        return false;
     }
     public function getSourceLanguages() {
         return array("ar","fi","it","ru","bg","fr","jp","sk","ca","de","ko","sl",
@@ -107,8 +107,8 @@ class Bing extends \SoapClient implements \IProvider {
                         }
 
      
-                        //$translation = $this->translate($sourceLanguage,$targetLanguage,$text);
-                        $translation = $text; // un comment for fake translation
+                        $translation = $this->translate($sourceLanguage,$targetLanguage,$text);
+                        //$translation = $text; // un comment for fake translation
                         
                         
                         $alt_trans = $doc->createElement("alt-trans");
@@ -289,7 +289,7 @@ class Bing extends \SoapClient implements \IProvider {
                             do{
                                 $id="mrkID_".$mrkId++;      
                             }
-                            while ($xpath->query("//unit[@id='$unitID' and ./segment[@id='$idVal']//mrk[@id='$id']]")->length>0);
+                            while ($xpath->query("//*[local-name()='unit' and @id='$unitID' and ./segment[@id='$idVal']/*[local-name()='mrk' and @id='$id']]")->length>0);
                             $mrk->setAttribute("id", $id);
                             $mrk->setAttribute("ref","#".$matchelementID);
                             $segmentSource->appendChild($mrk);

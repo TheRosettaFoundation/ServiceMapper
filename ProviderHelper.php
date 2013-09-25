@@ -268,13 +268,12 @@ class ProviderHelper {
                         
                     foreach($matchElements as $matchElement){                        
                         $matchID = $matchElement->getAttribute("id");
-                        
-                        
-                        $matchSeg=$xPath2->query("//unit[@id='$unitId']/segment[.//mrk[@ref='#$matchID']]")->item(0);
+                        $xPath2->registerNamespace("xlf", "urn:oasis:names:tc:xliff:document:2.0");
+                        $matchSeg=$xPath2->query("//xlf:unit[@id='$unitId']/xlf:segment[.//xlf:mrk[@ref='#$matchID']]")->item(0);
                         $originalSeg= $xPath->query($matchSeg->getNodePath())->item(0);
-                     
+                        
                         $temp= 0;
-                        while($xPath->query("//unit[@id='$unitId']/*[local-name()='matches']/*[local-name()='match' and @id='$matchID']")->length>0){
+                        while($xPath->query("//xlf:unit [@id='$unitId']/*[local-name()='matches']/*[local-name()='match' and @id='$matchID']")->length>0){
                             $matchID.=$temp++;  
                         }
                         $matchElement->setAttribute("id",$matchID);

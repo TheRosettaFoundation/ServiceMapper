@@ -62,7 +62,7 @@ class XLIFF {
         if($xliffVersion == XLIFFVersionEnum::XLIFF_2_0) {
             $xliffElement = $doc->getElementsByTagName("xliff")->item(0);
             $source = $xliffElement->getAttribute("srcLang");
-            if($target = $xliffElement->getAttribute("tgtLang")) {                
+            if($target = $xliffElement->getAttribute("trgLang")) {                
                 return $this->processFile($xliffVersion, $doc, $xliff, $source, $target);
             } else {
                 return $xliff;
